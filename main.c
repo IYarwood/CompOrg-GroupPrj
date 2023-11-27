@@ -3,6 +3,23 @@
 #include <string.h>
 #include <stdlib.h>
 
+int extractAddressLocation(int first, int second) {
+	//Creating strings to hold hexa values of the 2 cells
+	char hexString[5];
+	char hexString2[5];
+	//Converting deci values to hexa
+	sprintf(hexString, "%x", first);
+	sprintf(hexString2, "%x", second);
+
+	//Merging Strings, merged string is stored in hexString
+	strcat(hexString, hexString2);
+
+	//Converts merged strings to decimal value
+	int memLocation;
+	memLocation = strtol(hexString, NULL, 16);
+	return memLocation;
+}
+
 int main() {
 	//Initializing main mem, accumulator, index register
 	int mem[65536];
@@ -36,19 +53,9 @@ int main() {
 			int first = mem[j + 1];
 			int second = mem[j + 2];
 
-			//Creating strings to hold hexa values of the 2 cells
-			char hexString[5];
-			char hexString2[5];
-			//Converting deci values to hexa
-			sprintf(hexString, "%x", first);
-			sprintf(hexString2, "%x", second);
-
-			//Merging Strings, merged string is stored in hexString
-			strcat(hexString, hexString2);
-
 			//Converts merged strings to decimal value
 			int memLocation;
-			memLocation = strtol(hexString, NULL, 16);
+			memLocation = extractAddressLocation(first, second);
 
 			//Accesses specified memory location
 			//Have not done much testing but this accesses the correct cell when using "D1 00 0D F1 FC 16 D1 00 0E F1 FC 16 00 48 69 zz"
@@ -60,27 +67,14 @@ int main() {
 		else if (mem[j] == 241) {
 			int first = mem[j + 1];
 			int second = mem[j + 2];
-
-			//Creating strings to hold hexa values of the 2 cells
-			char hexString[5];
-			char hexString2[5];
-			//Converting deci values to hexa
-			sprintf(hexString, "%x", first);
-			sprintf(hexString2, "%x", second);
-
-			//Merging Strings, merged string is stored in hexString
-			strcat(hexString, hexString2);
-
-			//Converts merged strings to decimal value
-			int memLocation;
-			memLocation = strtol(hexString, NULL, 16);
-
+			int memLocation = extractAddressLocation(first,second)
 			//If cells are FC16/64534 print them
 			if (memLocation == 64534) {
 				printf("String stored in output cells: %d\n", accum);
 			}
 			j += 3;
 		}
+		//This else statement takes care of STOP/00
 		else {
 			j += 1;
 		}
