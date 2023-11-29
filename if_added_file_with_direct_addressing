@@ -1,0 +1,707 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+int main() {
+	//Initializing main mem, accumulator, index register
+	int mem[65536];
+	int accum;
+	int index;
+
+	//Inputs
+	printf("Enter Object Code: ");
+	char input[3];
+	int deciValue = 0;
+	int i = 0;
+
+	do {
+		//Reads object code string by string untill string = zz
+		scanf("%s", &input);
+
+		//Converts string into decimal value
+		deciValue = strtol(input, NULL, 16);
+
+		//Storing in main mem
+		mem[i] = deciValue;
+
+		i += 1;
+	} while (strcmp(input, "zz") != 0);
+
+	int j = 0;
+	//While loop to work with object code
+	while (mem[j] != '\0')
+		//If mem value = 209/D1/LDBA load the next 2 cells of mem
+		//1
+		if (mem[j] == 209) {//ldba,d
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+
+			//Creating strings to hold hexa values of the 2 cells
+			char hexString[5];
+			char hexString2[5];
+			//Converting deci values to hexa
+			sprintf(hexString, "%x", first);
+			sprintf(hexString2, "%x", second);
+
+			//Merging Strings, merged string is stored in hexString
+			strcat(hexString, hexString2);
+
+			//Converts merged strings to decimal value
+			int memLocation;
+			memLocation = strtol(hexString, NULL, 16);
+
+			//Accesses specified memory location
+			//Have not done much testing but this accesses the correct cell when using "D1 00 0D F1 FC 16 D1 00 0E F1 FC 16 00 48 69 zz"
+			accum = mem[memLocation];
+			printf("Int accessed: %d\n", accum);
+			j += 3;
+		}
+	    //2
+		//If mem = 241/STBA/F1 then load next 2 values in mem,d
+		else if (mem[j] == 241) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+
+			//Creating strings to hold hexa values of the 2 cells
+			char hexString[5];
+			char hexString2[5];
+			//Converting deci values to hexa
+			sprintf(hexString, "%x", first);
+			sprintf(hexString2, "%x", second);
+
+			//Merging Strings, merged string is stored in hexString
+			strcat(hexString, hexString2);
+
+			//Converts merged strings to decimal value
+			int memLocation;
+			memLocation = strtol(hexString, NULL, 16);
+
+			//If cells are FC16/64534 print them
+			if (memLocation == 64534) {
+				printf("String stored in output cells: %d\n", accum);
+			}
+			j += 3;
+		}
+	    //3
+		else if (mem[j] == 57) {// deco,d
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+
+			//Creating strings to hold hexa values of the 2 cells
+			char hexString[5];
+			char hexString2[5];
+			//Converting deci values to hexa
+			sprintf(hexString, "%x", first);
+			sprintf(hexString2, "%x", second);
+
+			//Merging Strings, merged string is stored in hexString
+			strcat(hexString, hexString2);
+
+			//Converts merged strings to decimal value
+			int memLocation;
+			memLocation = strtol(hexString, NULL, 16);
+
+			
+			j += 3;
+		}
+	   //4
+		else if (mem[j] == 18) {//BR
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+
+			//Creating strings to hold hexa values of the 2 cells
+			char hexString[5];
+			char hexString2[5];
+			//Converting deci values to hexa
+			sprintf(hexString, "%x", first);
+			sprintf(hexString2, "%x", second);
+
+			//Merging Strings, merged string is stored in hexString
+			strcat(hexString, hexString2);
+
+			//Converts merged strings to decimal value
+			int memLocation;
+			memLocation = strtol(hexString, NULL, 16);
+
+
+			j += 3;
+		}
+	    //5
+		else if (mem[j] == 193) {//ldwa,d
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+
+			//Creating strings to hold hexa values of the 2 cells
+			char hexString[5];
+			char hexString2[5];
+			//Converting deci values to hexa
+			sprintf(hexString, "%x", first);
+			sprintf(hexString2, "%x", second);
+
+			//Merging Strings, merged string is stored in hexString
+			strcat(hexString, hexString2);
+
+			//Converts merged strings to decimal value
+			int memLocation;
+			memLocation = strtol(hexString, NULL, 16);
+
+
+			j += 3;
+		}
+		//6
+		else if (mem[j] == 221) {//STWA,d
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+
+			//Creating strings to hold hexa values of the 2 cells
+			char hexString[5];
+			char hexString2[5];
+			//Converting deci values to hexa
+			sprintf(hexString, "%x", first);
+			sprintf(hexString2, "%x", second);
+
+			//Merging Strings, merged string is stored in hexString
+			strcat(hexString, hexString2);
+
+			//Converts merged strings to decimal value
+			int memLocation;
+			memLocation = strtol(hexString, NULL, 16);
+
+
+			j += 3;
+			}
+		//7
+		else if (mem[j] == 97) {//adda,d
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+
+			//Creating strings to hold hexa values of the 2 cells
+			char hexString[5];
+			char hexString2[5];
+			//Converting deci values to hexa
+			sprintf(hexString, "%x", first);
+			sprintf(hexString2, "%x", second);
+
+			//Merging Strings, merged string is stored in hexString
+			strcat(hexString, hexString2);
+
+			//Converts merged strings to decimal value
+			int memLocation;
+			memLocation = strtol(hexString, NULL, 16);
+
+
+			j += 3;
+			}
+			//8
+		else if (mem[j] == 217) {//ldbx,d
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+
+			//Creating strings to hold hexa values of the 2 cells
+			char hexString[5];
+			char hexString2[5];
+			//Converting deci values to hexa
+			sprintf(hexString, "%x", first);
+			sprintf(hexString2, "%x", second);
+
+			//Merging Strings, merged string is stored in hexString
+			strcat(hexString, hexString2);
+
+			//Converts merged strings to decimal value
+			int memLocation;
+			memLocation = strtol(hexString, NULL, 16);
+
+
+			j += 3;
+			}
+			//9
+		else if (mem[j] == 201) {//ldwx,d
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+
+			//Creating strings to hold hexa values of the 2 cells
+			char hexString[5];
+			char hexString2[5];
+			//Converting deci values to hexa
+			sprintf(hexString, "%x", first);
+			sprintf(hexString2, "%x", second);
+
+			//Merging Strings, merged string is stored in hexString
+			strcat(hexString, hexString2);
+
+			//Converts merged strings to decimal value
+			int memLocation;
+			memLocation = strtol(hexString, NULL, 16);
+
+
+			j += 3;
+			}
+			//10
+		else if (mem[j] == 249) {//stbx,d
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+
+			//Creating strings to hold hexa values of the 2 cells
+			char hexString[5];
+			char hexString2[5];
+			//Converting deci values to hexa
+			sprintf(hexString, "%x", first);
+			sprintf(hexString2, "%x", second);
+
+			//Merging Strings, merged string is stored in hexString
+			strcat(hexString, hexString2);
+
+			//Converts merged strings to decimal value
+			int memLocation;
+			memLocation = strtol(hexString, NULL, 16);
+
+
+			j += 3;
+			}
+			//11
+		else if (mem[j] == 233) {//stwx,d
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+
+			//Creating strings to hold hexa values of the 2 cells
+			char hexString[5];
+			char hexString2[5];
+			//Converting deci values to hexa
+			sprintf(hexString, "%x", first);
+			sprintf(hexString2, "%x", second);
+
+			//Merging Strings, merged string is stored in hexString
+			strcat(hexString, hexString2);
+
+			//Converts merged strings to decimal value
+			int memLocation;
+			memLocation = strtol(hexString, NULL, 16);
+
+
+			j += 3;
+			}
+			//12
+		else if (mem[j] == 105) {//addx,d
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+
+			//Creating strings to hold hexa values of the 2 cells
+			char hexString[5];
+			char hexString2[5];
+			//Converting deci values to hexa
+			sprintf(hexString, "%x", first);
+			sprintf(hexString2, "%x", second);
+
+			//Merging Strings, merged string is stored in hexString
+			strcat(hexString, hexString2);
+
+			//Converts merged strings to decimal value
+			int memLocation;
+			memLocation = strtol(hexString, NULL, 16);
+
+
+			j += 3;
+			}
+			//13
+		else if (mem[j] == 113) {//suba,d
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+
+			//Creating strings to hold hexa values of the 2 cells
+			char hexString[5];
+			char hexString2[5];
+			//Converting deci values to hexa
+			sprintf(hexString, "%x", first);
+			sprintf(hexString2, "%x", second);
+
+			//Merging Strings, merged string is stored in hexString
+			strcat(hexString, hexString2);
+
+			//Converts merged strings to decimal value
+			int memLocation;
+			memLocation = strtol(hexString, NULL, 16);
+
+
+			j += 3;
+			}
+			//14
+		else if (mem[j] == 121) {//subx,d
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+
+			//Creating strings to hold hexa values of the 2 cells
+			char hexString[5];
+			char hexString2[5];
+			//Converting deci values to hexa
+			sprintf(hexString, "%x", first);
+			sprintf(hexString2, "%x", second);
+
+			//Merging Strings, merged string is stored in hexString
+			strcat(hexString, hexString2);
+
+			//Converts merged strings to decimal value
+			int memLocation;
+			memLocation = strtol(hexString, NULL, 16);
+
+
+			j += 3;
+			}
+			//15
+		else if (mem[j] == 10) {//asla
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+
+			//Creating strings to hold hexa values of the 2 cells
+			char hexString[5];
+			char hexString2[5];
+			//Converting deci values to hexa
+			sprintf(hexString, "%x", first);
+			sprintf(hexString2, "%x", second);
+
+			//Merging Strings, merged string is stored in hexString
+			strcat(hexString, hexString2);
+
+			//Converts merged strings to decimal value
+			int memLocation;
+			memLocation = strtol(hexString, NULL, 16);
+
+
+			j += 3;
+			}
+			//16
+		else if (mem[j] == 12) {//asra
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+
+			//Creating strings to hold hexa values of the 2 cells
+			char hexString[5];
+			char hexString2[5];
+			//Converting deci values to hexa
+			sprintf(hexString, "%x", first);
+			sprintf(hexString2, "%x", second);
+
+			//Merging Strings, merged string is stored in hexString
+			strcat(hexString, hexString2);
+
+			//Converts merged strings to decimal value
+			int memLocation;
+			memLocation = strtol(hexString, NULL, 16);
+
+
+			j += 3;
+			}
+			//17
+		else if (mem[j] == 11) {//aslx
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+
+			//Creating strings to hold hexa values of the 2 cells
+			char hexString[5];
+			char hexString2[5];
+			//Converting deci values to hexa
+			sprintf(hexString, "%x", first);
+			sprintf(hexString2, "%x", second);
+
+			//Merging Strings, merged string is stored in hexString
+			strcat(hexString, hexString2);
+
+			//Converts merged strings to decimal value
+			int memLocation;
+			memLocation = strtol(hexString, NULL, 16);
+
+
+			j += 3;
+			}
+			//18
+		else if (mem[j] == 13) {//asrx
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+
+			//Creating strings to hold hexa values of the 2 cells
+			char hexString[5];
+			char hexString2[5];
+			//Converting deci values to hexa
+			sprintf(hexString, "%x", first);
+			sprintf(hexString2, "%x", second);
+
+			//Merging Strings, merged string is stored in hexString
+			strcat(hexString, hexString2);
+
+			//Converts merged strings to decimal value
+			int memLocation;
+			memLocation = strtol(hexString, NULL, 16);
+
+
+			j += 3;
+			}
+			//19
+		else if (mem[j] == 14) {//brle
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+
+			//Creating strings to hold hexa values of the 2 cells
+			char hexString[5];
+			char hexString2[5];
+			//Converting deci values to hexa
+			sprintf(hexString, "%x", first);
+			sprintf(hexString2, "%x", second);
+
+			//Merging Strings, merged string is stored in hexString
+			strcat(hexString, hexString2);
+
+			//Converts merged strings to decimal value
+			int memLocation;
+			memLocation = strtol(hexString, NULL, 16);
+
+
+			j += 3;
+			}
+			//20
+		else if (mem[j] == 22) {//brlt
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+
+			//Creating strings to hold hexa values of the 2 cells
+			char hexString[5];
+			char hexString2[5];
+			//Converting deci values to hexa
+			sprintf(hexString, "%x", first);
+			sprintf(hexString2, "%x", second);
+
+			//Merging Strings, merged string is stored in hexString
+			strcat(hexString, hexString2);
+
+			//Converts merged strings to decimal value
+			int memLocation;
+			memLocation = strtol(hexString, NULL, 16);
+
+
+			j += 3;
+			}
+			//21
+		else if (mem[j] ==24) {//breq
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+
+			//Creating strings to hold hexa values of the 2 cells
+			char hexString[5];
+			char hexString2[5];
+			//Converting deci values to hexa
+			sprintf(hexString, "%x", first);
+			sprintf(hexString2, "%x", second);
+
+			//Merging Strings, merged string is stored in hexString
+			strcat(hexString, hexString2);
+
+			//Converts merged strings to decimal value
+			int memLocation;
+			memLocation = strtol(hexString, NULL, 16);
+
+
+			j += 3;
+			}
+			//22
+		else if (mem[j] == 28) {//brge
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+
+			//Creating strings to hold hexa values of the 2 cells
+			char hexString[5];
+			char hexString2[5];
+			//Converting deci values to hexa
+			sprintf(hexString, "%x", first);
+			sprintf(hexString2, "%x", second);
+
+			//Merging Strings, merged string is stored in hexString
+			strcat(hexString, hexString2);
+
+			//Converts merged strings to decimal value
+			int memLocation;
+			memLocation = strtol(hexString, NULL, 16);
+
+
+			j += 3;
+			}
+			//23
+		else if (mem[j] == 30) {//brgt
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+
+			//Creating strings to hold hexa values of the 2 cells
+			char hexString[5];
+			char hexString2[5];
+			//Converting deci values to hexa
+			sprintf(hexString, "%x", first);
+			sprintf(hexString2, "%x", second);
+
+			//Merging Strings, merged string is stored in hexString
+			strcat(hexString, hexString2);
+
+			//Converts merged strings to decimal value
+			int memLocation;
+			memLocation = strtol(hexString, NULL, 16);
+
+
+			j += 3;
+			}
+			//24
+		else if (mem[j] == 32) {//BRV
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+
+			//Creating strings to hold hexa values of the 2 cells
+			char hexString[5];
+			char hexString2[5];
+			//Converting deci values to hexa
+			sprintf(hexString, "%x", first);
+			sprintf(hexString2, "%x", second);
+
+			//Merging Strings, merged string is stored in hexString
+			strcat(hexString, hexString2);
+
+			//Converts merged strings to decimal value
+			int memLocation;
+			memLocation = strtol(hexString, NULL, 16);
+
+
+			j += 3;
+			}
+			//25
+		else if (mem[j] == 161) {//cpwa,d
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+
+			//Creating strings to hold hexa values of the 2 cells
+			char hexString[5];
+			char hexString2[5];
+			//Converting deci values to hexa
+			sprintf(hexString, "%x", first);
+			sprintf(hexString2, "%x", second);
+
+			//Merging Strings, merged string is stored in hexString
+			strcat(hexString, hexString2);
+
+			//Converts merged strings to decimal value
+			int memLocation;
+			memLocation = strtol(hexString, NULL, 16);
+
+
+			j += 3;
+			}
+			//26
+		else if (mem[j] == 169) {//cpwx,d
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+
+			//Creating strings to hold hexa values of the 2 cells
+			char hexString[5];
+			char hexString2[5];
+			//Converting deci values to hexa
+			sprintf(hexString, "%x", first);
+			sprintf(hexString2, "%x", second);
+
+			//Merging Strings, merged string is stored in hexString
+			strcat(hexString, hexString2);
+
+			//Converts merged strings to decimal value
+			int memLocation;
+			memLocation = strtol(hexString, NULL, 16);
+
+
+			j += 3;
+			}
+			//27
+		else if (mem[j] == 177) {//cpba,d
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+
+			//Creating strings to hold hexa values of the 2 cells
+			char hexString[5];
+			char hexString2[5];
+			//Converting deci values to hexa
+			sprintf(hexString, "%x", first);
+			sprintf(hexString2, "%x", second);
+
+			//Merging Strings, merged string is stored in hexString
+			strcat(hexString, hexString2);
+
+			//Converts merged strings to decimal value
+			int memLocation;
+			memLocation = strtol(hexString, NULL, 16);
+
+
+			j += 3;
+			}
+			//28
+		else if (mem[j] == 185) {//cpbx,d
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+
+			//Creating strings to hold hexa values of the 2 cells
+			char hexString[5];
+			char hexString2[5];
+			//Converting deci values to hexa
+			sprintf(hexString, "%x", first);
+			sprintf(hexString2, "%x", second);
+
+			//Merging Strings, merged string is stored in hexString
+			strcat(hexString, hexString2);
+
+			//Converts merged strings to decimal value
+			int memLocation;
+			memLocation = strtol(hexString, NULL, 16);
+
+
+			j += 3;
+			}
+			//29
+		else if (mem[j] == 89) {//subsp,d
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+
+			//Creating strings to hold hexa values of the 2 cells
+			char hexString[5];
+			char hexString2[5];
+			//Converting deci values to hexa
+			sprintf(hexString, "%x", first);
+			sprintf(hexString2, "%x", second);
+
+			//Merging Strings, merged string is stored in hexString
+			strcat(hexString, hexString2);
+
+			//Converts merged strings to decimal value
+			int memLocation;
+			memLocation = strtol(hexString, NULL, 16);
+
+
+			j += 3;
+			}
+			//30
+		else if (mem[j] == 81) {//addsp,d
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+
+			//Creating strings to hold hexa values of the 2 cells
+			char hexString[5];
+			char hexString2[5];
+			//Converting deci values to hexa
+			sprintf(hexString, "%x", first);
+			sprintf(hexString2, "%x", second);
+
+			//Merging Strings, merged string is stored in hexString
+			strcat(hexString, hexString2);
+
+			//Converts merged strings to decimal value
+			int memLocation;
+			memLocation = strtol(hexString, NULL, 16);
+
+
+			j += 3;
+			}
+		else {
+			j += 1;
+		}
+
+	return 0;
+}
