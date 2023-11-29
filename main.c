@@ -48,7 +48,7 @@ int main() {
 	int j = 0;
 	//While loop to work with object code
 	while (mem[j] != '\0')
-		//If mem value = 209/D1/LDBA load the next 2 cells of mem
+		//If mem value = 209 = D1 = LDBA Direct load the next 2 cells of mem
 		if (mem[j] == 209) {
 			int first = mem[j + 1];
 			int second = mem[j + 2];
@@ -63,6 +63,45 @@ int main() {
 			printf("Int accessed: %d\n", accum);
 			j += 3;
 		}
+		//208 = D0 = LDBA Immediate
+		else if (mem[j] == 208) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+
+			//Converts merged strings to decimal value
+			int memLocation;
+			memLocation = extractAddressLocation(first, second);
+
+			accum = memLocation;
+			j += 3 
+		}
+		//217 = D9 = LDBX Direct
+		else if (mem[j] == 217) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+
+			//Converts merged strings to decimal value
+			int memLocation;
+			memLocation = extractAddressLocation(first, second);
+
+			//Accesses specified memory location
+			//Have not done much testing but this accesses the correct cell when using "D1 00 0D F1 FC 16 D1 00 0E F1 FC 16 00 48 69 zz"
+			index = mem[memLocation];
+			
+			j += 3;
+		}
+		//216 = D8 = LDBX immediate
+		else if (mem[j] == 216) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+
+			//Converts merged strings to decimal value
+			int memLocation;
+			memLocation = extractAddressLocation(first, second);
+
+			index = memLocation;
+			j += 3
+		}
 		//If mem = 241/STBA/F1 then load next 2 values in mem
 		else if (mem[j] == 241) {
 			int first = mem[j + 1];
@@ -71,6 +110,10 @@ int main() {
 			//If cells are FC16/64534 print them
 			if (memLocation == 64534) {
 				printf("String stored in output cells: %d\n", accum);
+			}
+			//If not FC16 then store accumulator at given address
+			else {
+				mem[memLocation] = accum;
 			}
 			j += 3;
 		}
