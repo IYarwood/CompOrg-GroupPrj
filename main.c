@@ -25,6 +25,7 @@ int main() {
 	int mem[65536];
 	int accum;
 	int index;
+	int sp = 64399;
 
 	//Inputs
 	printf("Enter Object Code: ");
@@ -106,7 +107,7 @@ int main() {
 		else if (mem[j] == 241) {
 			int first = mem[j + 1];
 			int second = mem[j + 2];
-			int memLocation = extractAddressLocation(first,second)
+			int memLocation = extractAddressLocation(first, second);
 			//If cells are FC16/64534 print them
 			if (memLocation == 64534) {
 				printf("String stored in output cells: %d\n", accum);
@@ -116,6 +117,51 @@ int main() {
 				mem[memLocation] = accum;
 			}
 			j += 3;
+		}
+		//STWX stack = EB = 235
+		else if (mem[j] == 235) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			int placeInStack = memLocation;
+			mem[sp - placeInStack] = index;
+		}
+		//DECO = 39(hexa) = 57 direct
+		else if (mem[j] == 57) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			printf("%d", mem[memLocation]);
+			j += 3;
+		}
+		//DECO = 38(hexa) = 56 immediate
+		else if (mem[j] == 56) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			printf("%d", memLocation);
+			j += 3;
+		}
+		//BR = 12(hexa) = 18
+		else if (mem[j] == 18) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			j = memLocation;
+		}
+		//SUBSP Immediate = 58(hexa) = 88
+		else if (mem[j] == 88) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			sp -= memLocation;
+		}
+		//ADDSP Immediate = 50(hexa) = 80
+		else if (mem[j] == 80) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			sp += memLocation;
 		}
 		//This else statement takes care of STOP/00
 		else {
