@@ -103,6 +103,24 @@ int main() {
 			index = memLocation;
 			j += 3
 		}
+		//LDWA s = C3 = 195
+		else if (mem[j] == 195) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+
+			accum = mem[sp - memLocation];
+			j += 3;
+		}
+		//LDWX s = CB = 203
+		else if (mem[j] == 203) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+
+			index = mem[sp - memLocation];
+			j += 3;
+		}
 		//If mem = 241/STBA/F1 then load next 2 values in mem
 		else if (mem[j] == 241) {
 			int first = mem[j + 1];
@@ -118,6 +136,16 @@ int main() {
 			}
 			j += 3;
 		}
+		//STWA stack = E3 = 227
+		else if (mem[j] == 227) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			int placeInStack = memLocation;
+			mem[sp - placeInStack] = accum;
+
+			j += 3;
+		}
 		//STWX stack = EB = 235
 		else if (mem[j] == 235) {
 			int first = mem[j + 1];
@@ -125,6 +153,8 @@ int main() {
 			int memLocation = extractAddressLocation(first, second);
 			int placeInStack = memLocation;
 			mem[sp - placeInStack] = index;
+
+			j += 3;
 		}
 		//DECO = 39(hexa) = 57 direct
 		else if (mem[j] == 57) {
