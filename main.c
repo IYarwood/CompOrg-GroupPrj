@@ -121,6 +121,8 @@ int main() {
 			index = mem[sp - memLocation];
 			j += 3;
 		}
+		//For stack relative defered, store address of value in mem, when we get the load word instruction, we will know it will be there already
+
 		//If mem = 241/STBA/F1 then load next 2 values in mem
 		else if (mem[j] == 241) {
 			int first = mem[j + 1];
