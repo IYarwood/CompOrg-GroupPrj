@@ -49,6 +49,7 @@ int main() {
 	int j = 0;
 	//While loop to work with object code
 	while (mem[j] != '\0')
+		//LDBr SECTION HERE
 		//If mem value = 209 = D1 = LDBA Direct load the next 2 cells of mem
 		if (mem[j] == 209) {
 			int first = mem[j + 1];
@@ -103,6 +104,61 @@ int main() {
 			index = memLocation;
 			j += 3
 		}
+
+		//LDWr SECTION HERE, direct=DONE, immediate=DONE, stack=DONE
+		//LDWA direct = C1 = 193
+		else if (mem[j] == 193) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+
+			//Converts merged strings to decimal value
+			int memLocation;
+			memLocation = extractAddressLocation(first, second);
+
+			//Accesses specified memory location
+			//Have not done much testing but this accesses the correct cell when using "D1 00 0D F1 FC 16 D1 00 0E F1 FC 16 00 48 69 zz"
+			accum = mem[memLocation];
+			printf("Int accessed: %d\n", accum);
+			j += 3;
+		}
+		//LDWX direct = C9 = 193
+		else if (mem[j] == 201) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+
+			//Converts merged strings to decimal value
+			int memLocation;
+			memLocation = extractAddressLocation(first, second);
+
+			//Accesses specified memory location
+			//Have not done much testing but this accesses the correct cell when using "D1 00 0D F1 FC 16 D1 00 0E F1 FC 16 00 48 69 zz"
+			index = mem[memLocation];
+			j += 3;
+		}
+		//LDWA Immediate = C0 = 192
+		else if (mem[j] == 192) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+
+			//Converts merged strings to decimal value
+			int memLocation;
+			memLocation = extractAddressLocation(first, second);
+
+			accum = memLocation;
+			j += 3
+		}
+		//LDWX Immdeiate = C8 = 200
+		else if (mem[j] == 200) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+
+			//Converts merged strings to decimal value
+			int memLocation;
+			memLocation = extractAddressLocation(first, second);
+
+			index = memLocation;
+			j += 3
+		}
 		//LDWA s = C3 = 195
 		else if (mem[j] == 195) {
 			int first = mem[j + 1];
@@ -123,6 +179,7 @@ int main() {
 		}
 		//For stack relative defered, store address of value in mem, when we get the load word instruction, we will know it will be there already
 
+		//STBr SECTION HERE
 		//If mem = 241/STBA/F1 then load next 2 values in mem
 		else if (mem[j] == 241) {
 			int first = mem[j + 1];
@@ -138,6 +195,24 @@ int main() {
 			}
 			j += 3;
 		}
+
+		//STWr SECTION HERE, stack=DONE
+		//STWA direct = E1 = 225
+		else if (mem[j] = 225) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			//If cells are FC16/64534 print them
+			if (memLocation == 64534) {
+				printf("String stored in output cells: %d\n", accum);
+			}
+			//If not FC16 then store accumulator at given address
+			else {
+				mem[memLocation] = accum;
+			}
+			j += 3;
+		}
+
 		//STWA stack = E3 = 227
 		else if (mem[j] == 227) {
 			int first = mem[j + 1];
@@ -158,6 +233,8 @@ int main() {
 
 			j += 3;
 		}
+
+		//DECO SECTION HERE
 		//DECO = 39(hexa) = 57 direct
 		else if (mem[j] == 57) {
 			int first = mem[j + 1];
@@ -174,6 +251,8 @@ int main() {
 			printf("%d", memLocation);
 			j += 3;
 		}
+
+		//BR SECTION HERE
 		//BR = 12(hexa) = 18
 		else if (mem[j] == 18) {
 			int first = mem[j + 1];
@@ -181,6 +260,8 @@ int main() {
 			int memLocation = extractAddressLocation(first, second);
 			j = memLocation;
 		}
+
+		//STACK POINTER SECTION HERE
 		//SUBSP Immediate = 58(hexa) = 88
 		else if (mem[j] == 88) {
 			int first = mem[j + 1];
