@@ -135,6 +135,7 @@ int main() {
 
 			//I think we have to change all our word functions to something like this
 			//Reason is because if we only go to the memLocation that would only be half the word
+			int word;
 			word = extractAddressLocation(memLocation, memLocation + 1);
 			accum = word;
 			printf("Int accessed: %d\n", accum);
@@ -449,5 +450,6 @@ int main() {
 		}
 		
 	//TODO = BRV, ASL, ASR, DECI, STRO, NOT, NEG, CPWr, CPBr, CALL, RET, MOVSPA
+	//Addressing Modes to Add = 
 	return 0;
 }
