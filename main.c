@@ -77,6 +77,15 @@ int main() {
 			accum = memLocation;
 			j += 3 
 		}
+		//LDBA stack = D3 = 211
+		else if (mem[j] == 211) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+
+			accum = mem[sp - memLocation];
+			j += 3;
+		}
 		//217 = D9 = LDBX Direct
 		else if (mem[j] == 217) {
 			int first = mem[j + 1];
@@ -104,6 +113,15 @@ int main() {
 			index = memLocation;
 			j += 3
 		}
+		//LDBX stack = DB = 219
+		else if (mem[j] == 219) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+
+			index = mem[sp - memLocation];
+			j += 3;
+		}
 
 		//LDWr SECTION HERE, direct=DONE, immediate=DONE, stack=DONE
 		//LDWA direct = C1 = 193
@@ -115,9 +133,10 @@ int main() {
 			int memLocation;
 			memLocation = extractAddressLocation(first, second);
 
-			//Accesses specified memory location
-			//Have not done much testing but this accesses the correct cell when using "D1 00 0D F1 FC 16 D1 00 0E F1 FC 16 00 48 69 zz"
-			accum = mem[memLocation];
+			//I think we have to change all our word functions to something like this
+			//Reason is because if we only go to the memLocation that would only be half the word
+			word = extractAddressLocation(memLocation, memLocation + 1);
+			accum = word;
 			printf("Int accessed: %d\n", accum);
 			j += 3;
 		}
@@ -260,6 +279,79 @@ int main() {
 			int memLocation = extractAddressLocation(first, second);
 			j = memLocation;
 		}
+		//BRLE = 14(hexa) = 20
+		else if (mem[j] == 20) {
+			if (accum <= 0) {
+				int first = mem[j + 1];
+				int second = mem[j + 2];
+				int memLocation = extractAddressLocation(first, second);
+				j = memLocation;
+			}
+			else {
+				j += 3;
+			}
+		}
+		//BRLT = 16(hexa) = 22
+		else if (mem[j] == 22) {
+			if (accum < 0) {
+				int first = mem[j + 1];
+				int second = mem[j + 2];
+				int memLocation = extractAddressLocation(first, second);
+				j = memLocation;
+			}
+			else {
+				j += 3;
+			}
+		}
+		//BREQ = 18(hexa) = 24
+		else if (mem[j] == 24) {
+			if (accum == 0) {
+				int first = mem[j + 1];
+				int second = mem[j + 2];
+				int memLocation = extractAddressLocation(first, second);
+				j = memLocation;
+			}
+			else {
+				j += 3;
+			}
+		}
+		//BRNE = 1A(hexa) = 26
+		else if (mem[j] == 26) {
+			if (accum != 0) {
+				int first = mem[j + 1];
+				int second = mem[j + 2];
+				int memLocation = extractAddressLocation(first, second);
+				j = memLocation;
+			}
+			else {
+				j += 3;
+			}
+		}
+		//BRGE = 1C(hexa) = 28
+		else if (mem[j] == 28) {
+			if (accum >= 0) {
+				int first = mem[j + 1];
+				int second = mem[j + 2];
+				int memLocation = extractAddressLocation(first, second);
+				j = memLocation;
+			}
+			else {
+				j += 3;
+			}
+		}
+		//BRGT = 1E(hexa) = 30
+		else if (mem[j] == 30) {
+			if (accum > 0) {
+				int first = mem[j + 1];
+				int second = mem[j + 2];
+				int memLocation = extractAddressLocation(first, second);
+				j = memLocation;
+			}
+			else {
+				j += 3;
+			}
+		}
+		//STILL NEED BRV
 
 		//STACK POINTER SECTION HERE
 		//SUBSP Immediate = 58(hexa) = 88
@@ -276,10 +368,86 @@ int main() {
 			int memLocation = extractAddressLocation(first, second);
 			sp += memLocation;
 		}
+		
+		//ADDA direct
+		else if (mem[j] == 97) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			accum = accum + mem[memLocation];
+			printf("accumulator sum is", accum);
+			j += 3;
+
+		}
+		//ADDA immediate
+		else if (mem[j] == 96) {//adda,i
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			accum = accum + memLocation;
+			j += 3;
+
+		}
+		//ADDX direct
+		else if (mem[j] == 105) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			index = index + mem[memLocation];
+			printf("index sum is", accum);
+			j += 3;
+		}
+		//ADDX immediate
+		else if (mem[j] == 104) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			index = index + memLocation;
+			j += 3;
+		}
+
+		//SUBA direct
+		else if (mem[j] == 113) {//suba,d
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			accum = accum - mem[memLocation];
+			printf("accumulator sum is", accum);
+			j += 3;
+		}
+		//SUBA immediate
+		else if (mem[j] == 112) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			accum = accum - memLocation;
+			printf("accumulator sum is", accum);
+			j += 3;
+		}
+		
+		//SUBX direct
+		else if (mem[j] == 121) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			index = index - mem[memLocation];
+			printf("index sum is", accum);
+			j += 3;
+		}
+		//SUBX immediate
+		else if (mem[j] == 120) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			index = index - memLocation;
+			printf("index sum is", accum);
+			j += 3;
+		}
 		//This else statement takes care of STOP/00
 		else {
 			j += 1;
 		}
-
+		
+	//TODO = BRV, ASL, ASR, DECI, STRO, NOT, NEG, CPWr, CPBr, CALL, RET, MOVSPA
 	return 0;
 }
