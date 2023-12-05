@@ -444,12 +444,28 @@ int main() {
 			printf("index sum is", accum);
 			j += 3;
 		}
+		//CALL = 24(hexa) = 36
+		else if (mem[j] == 36) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			mem[sp - 2] = j;
+			j = memLocation;
+		}
+		//RET = 01 = 1
+		else if (mem[j] == 1) {
+			int first = mem[sp];
+			int second = mem[sp + 1];
+			int memLocation = extractAddressLocation(first, second);
+
+			j = memLocation;
+		}
 		//This else statement takes care of STOP/00
 		else {
 			j += 1;
 		}
 		
-	//TODO = BRV, ASL, ASR, DECI, STRO, NOT, NEG, CPWr, CPBr, CALL, RET, MOVSPA
+	//TODO = BRV, ASL, ASR, DECI, STRO, NOT, NEG, CPWr, CPBr, MOVSPA
 	//Addressing Modes to Add = 
 	return 0;
 }
