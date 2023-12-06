@@ -79,7 +79,7 @@ int main() {
 			memLocation = extractAddressLocation(first, second);
 
 			accum = memLocation;
-			j += 3 
+			j += 3;
 		}
 		//LDBA stack = D3 = 211
 		else if (mem[j] == 211) {
@@ -115,7 +115,7 @@ int main() {
 			memLocation = extractAddressLocation(first, second);
 
 			index = memLocation;
-			j += 3
+			j += 3;
 		}
 		//LDBX stack = DB = 219
 		else if (mem[j] == 219) {
@@ -169,7 +169,7 @@ int main() {
 			memLocation = extractAddressLocation(first, second);
 
 			accum = memLocation;
-			j += 3
+			j += 3;
 		}
 		//LDWX Immdeiate = C8 = 200
 		else if (mem[j] == 200) {
@@ -181,7 +181,7 @@ int main() {
 			memLocation = extractAddressLocation(first, second);
 
 			index = memLocation;
-			j += 3
+			j += 3;
 		}
 		//LDWA s = C3 = 195
 		else if (mem[j] == 195) {
