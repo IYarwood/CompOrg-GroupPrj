@@ -271,6 +271,16 @@ int main() {
 			printf("%d", memLocation);
 			j += 3;
 		}
+		// Deci,d
+		else if (mem[j] == 49) {
+			printf("Enter Deci input: ");
+			int ints;
+			scanf("%d", ints);
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			mem[memLocation] = ints;
+		}
 
 		//BR SECTION HERE
 		//BR = 12(hexa) = 18
@@ -444,6 +454,55 @@ int main() {
 			printf("index sum is", accum);
 			j += 3;
 		}
+		
+		//AS SECTION
+		// ASLA
+		else if (mem[j] == 10) {
+			accum = accum * 2;
+			j += 1;
+		}
+
+		// ASLX
+		else if (mem[j] == 11) {
+			index = index * 2;
+			j += 1;
+		}
+
+		// ASRA
+		else if (mem[j] == 12) {
+			accum = accum / 2;
+			j += 1;
+		}
+		// ASRX
+		else if (mem[j] == 13) {
+			index = index / 2;
+			j += 1;
+		}
+
+		//NOT and NEG SECTION
+		//NOTA = 06 = 6
+		else if (mem[j] == 6) {
+			accum = ~accum;
+			j += 1;
+		}
+		//NOTA = 07 = 7
+		else if (mem[j] == 7) {
+			index = ~index;
+			j += 1;
+		}
+		//NEGA = 08 = 8
+		else if (mem[j] == 8) {
+			accum = ~accum;
+			accum += 1;
+			j += 1;
+		}
+		//NEGX = 09 = 9
+		else if (mem[j] == 9) {
+			index = ~index;
+			index += 1;
+			j += 1;
+		}
+		
 		//CALL = 24(hexa) = 36
 		else if (mem[j] == 36) {
 			int first = mem[j + 1];
@@ -465,7 +524,7 @@ int main() {
 			j += 1;
 		}
 		
-	//TODO = BRV, ASL, ASR, DECI, STRO, NOT, NEG, CPWr, CPBr, MOVSPA
-	//Addressing Modes to Add = 
+	//TODO = BRV, STRO, CPWr, CPBr, MOVSPA
+	//Addressing Modes to Add = stack relative deferred, indexed, stack-indexed, stack-deferred indexed, indirect
 	return 0;
 }
