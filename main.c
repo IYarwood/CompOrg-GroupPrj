@@ -26,6 +26,10 @@ int main() {
 	int accum;
 	int index;
 	int sp = 64399;
+	int v = 0;
+	int n = 0;
+	int z = 0;
+	int c = 0;
 
 	//Inputs
 	printf("Enter Object Code: ");
