@@ -3,7 +3,8 @@
 #include <string.h>
 #include <stdlib.h>
 
-void convert(int num) {
+
+void convert(int num, char* firstHalf, char* secondHalf) {
 
 	char hexString[5];  // 4 characters for hex and 1 for the null
 	char splitList[2][3];  // Array to hold two strings, each of 2 characters and a null terminator
@@ -20,6 +21,10 @@ void convert(int num) {
 	// Print the split strings
 	printf("First part: %s\n", splitList[0]);
 	printf("Second part: %s\n", splitList[1]);
+
+	firstHalf = splitList[0];
+	secondHalf = splitList[1];
+
 
 }
 
@@ -46,6 +51,7 @@ int main() {
 	int accum;
 	int index;
 	int sp = 64399;
+	int heapPointer;
 	int v = 0;
 	int n = 0;
 	int z = 0;
@@ -69,6 +75,8 @@ int main() {
 
 		i += 1;
 	} while (strcmp(input, "zz") != 0);
+	heapPointer = i;
+	
 
 	int j = 0;
 	//While loop to work with object code
@@ -86,7 +94,7 @@ int main() {
 			//Accesses specified memory location
 			//Have not done much testing but this accesses the correct cell when using "D1 00 0D F1 FC 16 D1 00 0E F1 FC 16 00 48 69 zz"
 			accum = mem[memLocation];
-			printf("Int accessed: %d\n", accum);
+			printf("Accessed: %d\n", accum);
 			j += 3;
 		}
 		//208 = D0 = LDBA Immediate
@@ -303,7 +311,22 @@ int main() {
 			int first = mem[j + 1];
 			int second = mem[j + 2];
 			int memLocation = extractAddressLocation(first, second);
-			mem[memLocation] = ints;
+			char* firstHalf;
+			char* secondHalf;
+			convert(ints, firstHalf, secondHalf);
+			mem[memLocation] = firstHalf*;
+			mem[memLocation] = secondHalf*;
+		}
+		//STRO SECTION
+		//STRO d = 49(hexa) = 73
+		else if (mem[j] == 73) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			
+			char string[5];
+			strncpy(string, mem[memLocation]);
+			printf("%s", string);
 		}
 
 		//BR SECTION HERE
