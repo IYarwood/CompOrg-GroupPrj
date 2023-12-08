@@ -4,7 +4,7 @@
 #include <stdlib.h>
 
 
-void convert(int num, char* firstHalf, char* secondHalf) {
+void convert(int num, int* firstHalf, int* secondHalf) {
 
 	char hexString[5];  // 4 characters for hex and 1 for the null
 	char splitList[2][3];  // Array to hold two strings, each of 2 characters and a null terminator
@@ -18,14 +18,14 @@ void convert(int num, char* firstHalf, char* secondHalf) {
 	strncpy(splitList[1], hexString + 2, 2); // Copy the next two characters
 	splitList[1][2] = '\0';                 // Null terminate the second string
 
+	int deciFirstHalf = strtol(splitList[0], NULL, 16);
+	int deciSecondHalf = strtol(splitList[1], NULL, 16);
+	*firstHalf = deciFirstHalf;
+	*secondHalf = deciSecondHalf;
+
 	// Print the split strings
 	printf("First part: %s\n", splitList[0]);
 	printf("Second part: %s\n", splitList[1]);
-
-	firstHalf = splitList[0];
-	secondHalf = splitList[1];
-
-
 }
 
 int extractAddressLocation(int first, int second) {
@@ -155,7 +155,7 @@ int main() {
 			j += 3;
 		}
 
-	//LDWr SECTION HERE, direct=DONE, immediate=DONE, stack=DONE
+	//LDWr SECTION HERE
 	//LDWA direct = C1 = 193
 		else if (mem[j] == 193) {
 			int first = mem[j + 1];
@@ -170,7 +170,7 @@ int main() {
 			int word;
 			word = extractAddressLocation(memLocation, memLocation + 1);
 			accum = word;
-			printf("Int accessed: %d\n", accum);
+			printf("Word Accessed: %d\n", accum);
 			j += 3;
 		}
 	//LDWX direct = C9 = 193
@@ -190,6 +190,7 @@ int main() {
 			index = mem[memLocation];
 			j += 3;
 		}
+
 	//LDWA Immediate = C0 = 192
 		else if (mem[j] == 192) {
 			int first = mem[j + 1];
@@ -299,25 +300,44 @@ int main() {
 			}
 			//If not FC16 then store accumulator at given address
 			else {
-				char firstHalf[3];
-				char secondHalf[3];
+				int deciFirstHalf;
+				int deciSecondHalf;
 				convert(accum, &firstHalf, &secondHalf);
-				int deciFirstHalf = strtol(firstHalf, NULL, 16);
-				int deciSecondHalf = strtol(secondHalf, NULL, 16);
 				mem[memLocation] = deciFirstHalf;
 				mem[memLocation + 1] = deciSecondHalf;
 			}
 			j += 3;
 		}
+	//STWX direct = E9 = 233
+		else if (mem[j] = 233) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			//If cells are FC16/64534 print them
+			if (memLocation == 64534) {
+				printf("String stored in output cells: %d\n", accum);
+			}
+			//If not FC16 then store accumulator at given address
+			else {
+				int deciFirstHalf;
+				int deciSecondHalf;
+				convert(index, &firstHalf, &secondHalf);
+				mem[memLocation] = deciFirstHalf;
+				mem[memLocation + 1] = deciSecondHalf;
+			}
+			j += 3;
+			}
 
 	//STWA stack = E3 = 227
 		else if (mem[j] == 227) {
 			int first = mem[j + 1];
 			int second = mem[j + 2];
 			int memLocation = extractAddressLocation(first, second);
-			int placeInStack = memLocation;
-			mem[sp - placeInStack] = accum;
-
+			int deciFirstHalf;
+			int deciSecondHalf;
+			convert(accum, &firstHalf, &secondHalf);
+			mem[sp - memLocation] = deciFirstHalf;
+			mem[sp - (memLocation + 1)] = deciSecondHalf;
 			j += 3;
 		}
 	//STWX stack = EB = 235
@@ -325,9 +345,11 @@ int main() {
 			int first = mem[j + 1];
 			int second = mem[j + 2];
 			int memLocation = extractAddressLocation(first, second);
-			int placeInStack = memLocation;
-			mem[sp - placeInStack] = index;
-
+			int deciFirstHalf;
+			int deciSecondHalf;
+			convert(index, &firstHalf, &secondHalf);
+			mem[sp - memLocation] = deciFirstHalf;
+			mem[sp - (memLocation + 1)] = deciSecondHalf;
 			j += 3;
 		}
 
