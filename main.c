@@ -287,7 +287,7 @@ int main() {
 		}
 
 
-	//STWr SECTION HERE, stack=DONE
+	//STWr SECTION HERE
 	//STWA direct = E1 = 225
 		else if (mem[j] = 225) {
 			int first = mem[j + 1];
@@ -299,7 +299,13 @@ int main() {
 			}
 			//If not FC16 then store accumulator at given address
 			else {
-				mem[memLocation] = accum;
+				char firstHalf[3];
+				char secondHalf[3];
+				convert(accum, firstHalf, secondHalf);
+				int deciFirstHalf = strtol(firstHalf, NULL, 16);
+				int deciSecondHalf = strtol(secondHalf, NULL, 16);
+				mem[memLocation] = deciFirstHalf;
+				mem[memLocation + 1] = deciSecondHalf;
 			}
 			j += 3;
 		}
