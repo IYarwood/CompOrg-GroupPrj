@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-
+//THIS IS THE CORRECT FILE
 void convert(int num, int* firstHalf, int* secondHalf) {
 
 	char hexString[5];  // 4 characters for hex and 1 for the null
@@ -46,6 +46,7 @@ int extractAddressLocation(int first, int second) {
 }
 
 int main() {
+	printf("HELLO");
 	//Initializing main mem, accumulator, index register
 	int mem[65536];
 	int accum;
@@ -94,7 +95,7 @@ int main() {
 			//Accesses specified memory location
 			//Have not done much testing but this accesses the correct cell when using "D1 00 0D F1 FC 16 D1 00 0E F1 FC 16 00 48 69 zz"
 			accum = mem[memLocation];
-			printf("Accessed: %d\n", accum);
+			printf("Byte Accessed: %d\n", accum);
 			j += 3;
 		}
 	//208 = D0 = LDBA Immediate
@@ -302,7 +303,7 @@ int main() {
 			else {
 				int deciFirstHalf;
 				int deciSecondHalf;
-				convert(accum, &firstHalf, &secondHalf);
+				convert(accum, &deciFirstHalf, &deciSecondHalf);
 				mem[memLocation] = deciFirstHalf;
 				mem[memLocation + 1] = deciSecondHalf;
 			}
@@ -321,12 +322,12 @@ int main() {
 			else {
 				int deciFirstHalf;
 				int deciSecondHalf;
-				convert(index, &firstHalf, &secondHalf);
+				convert(index, &deciFirstHalf, &deciSecondHalf);
 				mem[memLocation] = deciFirstHalf;
 				mem[memLocation + 1] = deciSecondHalf;
 			}
 			j += 3;
-			}
+		}
 
 	//STWA stack = E3 = 227
 		else if (mem[j] == 227) {
@@ -335,7 +336,7 @@ int main() {
 			int memLocation = extractAddressLocation(first, second);
 			int deciFirstHalf;
 			int deciSecondHalf;
-			convert(accum, &firstHalf, &secondHalf);
+			convert(accum, &deciFirstHalf, &deciSecondHalf);
 			mem[sp - memLocation] = deciFirstHalf;
 			mem[sp - (memLocation + 1)] = deciSecondHalf;
 			j += 3;
@@ -347,7 +348,7 @@ int main() {
 			int memLocation = extractAddressLocation(first, second);
 			int deciFirstHalf;
 			int deciSecondHalf;
-			convert(index, &firstHalf, &secondHalf);
+			convert(index, &deciFirstHalf, &deciSecondHalf);
 			mem[sp - memLocation] = deciFirstHalf;
 			mem[sp - (memLocation + 1)] = deciSecondHalf;
 			j += 3;
@@ -370,6 +371,7 @@ int main() {
 			printf("%d", memLocation);
 			j += 3;
 		}
+	//THIS STILL NEEDS WORK COME BACK TOO
 	// Deci,d
 		else if (mem[j] == 49) {
 			printf("Enter Deci input: ");
@@ -381,8 +383,8 @@ int main() {
 			char* firstHalf;
 			char* secondHalf;
 			convert(ints, firstHalf, secondHalf);
-			mem[memLocation] = firstHalf*;
-			mem[memLocation] = secondHalf*;
+			mem[memLocation] = *firstHalf;
+			mem[memLocation] = *secondHalf;
 		}
 	//STRO SECTION
 	//STRO d = 49(hexa) = 73
@@ -392,7 +394,7 @@ int main() {
 			int memLocation = extractAddressLocation(first, second);
 
 			char string[5];
-			strncpy(string, mem[memLocation]);
+			strcpy(string, mem[memLocation]);
 			printf("%s", string);
 		}
 
@@ -500,7 +502,6 @@ int main() {
 			int second = mem[j + 2];
 			int memLocation = extractAddressLocation(first, second);
 			accum = accum + mem[memLocation];
-			printf("accumulator sum is", accum);
 			j += 3;
 
 		}
@@ -519,7 +520,6 @@ int main() {
 			int second = mem[j + 2];
 			int memLocation = extractAddressLocation(first, second);
 			index = index + mem[memLocation];
-			printf("index sum is", accum);
 			j += 3;
 		}
 	//ADDX immediate
@@ -537,7 +537,6 @@ int main() {
 			int second = mem[j + 2];
 			int memLocation = extractAddressLocation(first, second);
 			accum = accum - mem[memLocation];
-			printf("accumulator sum is", accum);
 			j += 3;
 		}
 	//SUBA immediate
@@ -546,7 +545,6 @@ int main() {
 			int second = mem[j + 2];
 			int memLocation = extractAddressLocation(first, second);
 			accum = accum - memLocation;
-			printf("accumulator sum is", accum);
 			j += 3;
 		}
 
@@ -556,7 +554,6 @@ int main() {
 			int second = mem[j + 2];
 			int memLocation = extractAddressLocation(first, second);
 			index = index - mem[memLocation];
-			printf("index sum is", accum);
 			j += 3;
 		}
 	//SUBX immediate
@@ -565,7 +562,6 @@ int main() {
 			int second = mem[j + 2];
 			int memLocation = extractAddressLocation(first, second);
 			index = index - memLocation;
-			printf("index sum is", accum);
 			j += 3;
 		}
 
