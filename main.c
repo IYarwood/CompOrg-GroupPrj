@@ -301,7 +301,7 @@ int main() {
 			else {
 				char firstHalf[3];
 				char secondHalf[3];
-				convert(accum, firstHalf, secondHalf);
+				convert(accum, &firstHalf, &secondHalf);
 				int deciFirstHalf = strtol(firstHalf, NULL, 16);
 				int deciSecondHalf = strtol(secondHalf, NULL, 16);
 				mem[memLocation] = deciFirstHalf;
