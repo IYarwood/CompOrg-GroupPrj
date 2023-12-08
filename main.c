@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-//THIS IS THE CORRECT FILE
+//THIS IS CURRENT FILE 12/8/23
 void convert(int num, int* firstHalf, int* secondHalf) {
 
 	char hexString[5];  // 4 characters for hex and 1 for the null
@@ -46,7 +46,7 @@ int extractAddressLocation(int first, int second) {
 }
 
 int main() {
-	printf("HELLO");
+	printf("This is current");
 	//Initializing main mem, accumulator, index register
 	int mem[65536];
 	int accum;
@@ -95,7 +95,6 @@ int main() {
 			//Accesses specified memory location
 			//Have not done much testing but this accesses the correct cell when using "D1 00 0D F1 FC 16 D1 00 0E F1 FC 16 00 48 69 zz"
 			accum = mem[memLocation];
-			printf("Byte Accessed: %d\n", accum);
 			j += 3;
 		}
 	//208 = D0 = LDBA Immediate
@@ -166,12 +165,9 @@ int main() {
 			int memLocation;
 			memLocation = extractAddressLocation(first, second);
 
-			//I think we have to change all our word functions to something like this
-			//Reason is because if we only go to the memLocation that would only be half the word
 			int word;
-			word = extractAddressLocation(memLocation, memLocation + 1);
+			word = extractAddressLocation(mem[memLocation], mem[memLocation + 1]);
 			accum = word;
-			printf("Word Accessed: %d\n", accum);
 			j += 3;
 		}
 	//LDWX direct = C9 = 193
@@ -259,7 +255,7 @@ int main() {
 			int memLocation = extractAddressLocation(first, second);
 			//If cells are FC16/64534 print them
 			if (memLocation == 64534) {
-				printf("String stored in output cells: %d\n", accum);
+				printf("String stored in output cells: %d\n", index);
 			}
 			//If not FC16 then store accumulator at given address
 			else {
@@ -291,6 +287,7 @@ int main() {
 
 	//STWr SECTION HERE
 	//STWA direct = E1 = 225
+	//THIS SHOULDNT HAVE OUPUT STATEMENT
 		else if (mem[j] = 225) {
 			int first = mem[j + 1];
 			int second = mem[j + 2];
@@ -316,7 +313,7 @@ int main() {
 			int memLocation = extractAddressLocation(first, second);
 			//If cells are FC16/64534 print them
 			if (memLocation == 64534) {
-				printf("String stored in output cells: %d\n", accum);
+				printf("String stored in output cells: %d\n", index);
 			}
 			//If not FC16 then store accumulator at given address
 			else {
