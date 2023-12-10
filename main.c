@@ -46,7 +46,6 @@ int extractAddressLocation(int first, int second) {
 }
 
 int main() {
-	printf("This is current");
 	//Initializing main mem, accumulator, index register
 	int mem[65536];
 	int accum;
@@ -240,7 +239,7 @@ int main() {
 			int memLocation = extractAddressLocation(first, second);
 			//If cells are FC16/64534 print them
 			if (memLocation == 64534) {
-				printf("String stored in output cells: %d\n", accum);
+				printf("%c", accum);
 			}
 			//If not FC16 then store accumulator at given address
 			else {
@@ -255,7 +254,7 @@ int main() {
 			int memLocation = extractAddressLocation(first, second);
 			//If cells are FC16/64534 print them
 			if (memLocation == 64534) {
-				printf("String stored in output cells: %d\n", index);
+				printf("%c", index);
 			}
 			//If not FC16 then store accumulator at given address
 			else {
@@ -283,49 +282,31 @@ int main() {
 
 			j += 3;
 		}
-
-
 	//STWr SECTION HERE
 	//STWA direct = E1 = 225
-	//THIS SHOULDNT HAVE OUPUT STATEMENT
-		else if (mem[j] = 225) {
+		else if (mem[j] == 225) {
 			int first = mem[j + 1];
 			int second = mem[j + 2];
 			int memLocation = extractAddressLocation(first, second);
-			//If cells are FC16/64534 print them
-			if (memLocation == 64534) {
-				printf("String stored in output cells: %d\n", accum);
-			}
-			//If not FC16 then store accumulator at given address
-			else {
-				int deciFirstHalf;
-				int deciSecondHalf;
-				convert(accum, &deciFirstHalf, &deciSecondHalf);
-				mem[memLocation] = deciFirstHalf;
-				mem[memLocation + 1] = deciSecondHalf;
-			}
+			int deciFirstHalf;
+			int deciSecondHalf;
+			convert(accum, &deciFirstHalf, &deciSecondHalf);
+			mem[memLocation] = deciFirstHalf;
+			mem[memLocation + 1] = deciSecondHalf;
 			j += 3;
 		}
 	//STWX direct = E9 = 233
-		else if (mem[j] = 233) {
+		else if (mem[j] == 233) {
 			int first = mem[j + 1];
 			int second = mem[j + 2];
 			int memLocation = extractAddressLocation(first, second);
-			//If cells are FC16/64534 print them
-			if (memLocation == 64534) {
-				printf("String stored in output cells: %d\n", index);
-			}
-			//If not FC16 then store accumulator at given address
-			else {
-				int deciFirstHalf;
-				int deciSecondHalf;
-				convert(index, &deciFirstHalf, &deciSecondHalf);
-				mem[memLocation] = deciFirstHalf;
-				mem[memLocation + 1] = deciSecondHalf;
-			}
+			int deciFirstHalf;
+			int deciSecondHalf;
+			convert(index, &deciFirstHalf, &deciSecondHalf);
+			mem[memLocation] = deciFirstHalf;
+			mem[memLocation + 1] = deciSecondHalf;
 			j += 3;
 		}
-
 	//STWA stack = E3 = 227
 		else if (mem[j] == 227) {
 			int first = mem[j + 1];
@@ -350,7 +331,6 @@ int main() {
 			mem[sp - (memLocation + 1)] = deciSecondHalf;
 			j += 3;
 		}
-
 	//DECO SECTION HERE
 	//DECO = 39(hexa) = 57 direct
 		else if (mem[j] == 57) {
@@ -372,16 +352,10 @@ int main() {
 	// Deci,d
 		else if (mem[j] == 49) {
 			printf("Enter Deci input: ");
-			int ints;
-			scanf("%d", ints);
 			int first = mem[j + 1];
 			int second = mem[j + 2];
 			int memLocation = extractAddressLocation(first, second);
-			char* firstHalf;
-			char* secondHalf;
-			convert(ints, firstHalf, secondHalf);
-			mem[memLocation] = *firstHalf;
-			mem[memLocation] = *secondHalf;
+			//SHOULD BE LIKE STWA COMING BACK TOO LATER
 		}
 	//STRO SECTION
 	//STRO d = 49(hexa) = 73
