@@ -363,10 +363,13 @@ int main() {
 			int first = mem[j + 1];
 			int second = mem[j + 2];
 			int memLocation = extractAddressLocation(first, second);
-
-			char string[5];
-			strcpy(string, mem[memLocation]);
-			printf("%s", string);
+			
+			int track = memLocation;
+			while (mem[track] != 32) {
+				printf("%c", mem[track]);
+				track += 1;
+			}
+			j += 3; 
 		}
 
 	//BR SECTION HERE
@@ -600,12 +603,17 @@ int main() {
 
 			j = memLocation;
 		}
+	//MOVSPA
+		else if (mem[j] == 3) {
+			accum = sp;
+			j += 1; 
+		}
 	//This else statement takes care of STOP/00
 		else {
 			j += 1;
 		}
 
-	//TODO = BRV, STRO, CPWr, CPBr, MOVSPA
+	//TODO = BRV, CPWr, CPBr
 	//Addressing Modes to Add = stack relative deferred, indexed, stack-indexed, stack-deferred indexed, indirect
 	return 0;
 }
