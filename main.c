@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-//THIS IS CURRENT FILE 12/8/23
+//THIS IS CURRENT FILE 12/11/23
 void convert(int num, int* firstHalf, int* secondHalf) {
 
 	char hexString[5];  // 4 characters for hex and 1 for the null
@@ -440,13 +440,13 @@ int main() {
 			int first = mem[j + 1];
 			int second = mem[j + 2];
 			int memLocation = extractAddressLocation(first, second);
-			
+
 			int track = memLocation;
 			while (mem[track] != 32) {
 				printf("%c", mem[track]);
 				track += 1;
 			}
-			j += 3; 
+			j += 3;
 		}
 
 	//BR SECTION HERE
@@ -715,7 +715,7 @@ int main() {
 	//MOVSPA
 		else if (mem[j] == 3) {
 			accum = sp;
-			j += 1; 
+			j += 1;
 		}
 	//This else statement takes care of STOP/00
 		else {
