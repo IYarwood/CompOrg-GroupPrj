@@ -117,6 +117,15 @@ int main() {
 			accum = mem[sp - memLocation];
 			j += 3;
 		}
+	//LDBA stack relative deferred
+		else if (mem[j] == 212) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+
+			accum = mem[mem[sp + memLocation]];
+			j += 3;
+		}
 	//217 = D9 = LDBX Direct
 		else if (mem[j] == 217) {
 			int first = mem[j + 1];
@@ -153,7 +162,15 @@ int main() {
 			index = mem[sp - memLocation];
 			j += 3;
 		}
+	//LDBX stack relative deferred
+		else if (mem[j] == 220) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
 
+			index = mem[mem[sp + memLocation]];
+			j += 3;
+		}
 	//LDWr SECTION HERE
 	//LDWA direct = C1 = 193
 		else if (mem[j] == 193) {
@@ -229,7 +246,24 @@ int main() {
 			index = mem[sp - memLocation];
 			j += 3;
 		}
-	//For stack relative defered, store address of value in mem, when we get the load word instruction, we will know it will be there already
+	//LDWA stack relative deferred
+		else if (mem[j] == 196) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+
+			accum = mem[mem[sp + memLocation]];
+			j += 3;
+		}
+	//LDWX stack relative deferred
+		else if (mem[j] == 204) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+
+			index = mem[mem[sp + memLocation]];
+			j += 3;
+		}
 
 	//STBr SECTION HERE
 	//If mem = 241/STBA/F1 then load next 2 values in mem
@@ -282,6 +316,25 @@ int main() {
 
 			j += 3;
 		}
+	//STBA stack relative deferred
+		else if (mem[j] == 244) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			int placeInStack = memLocation;
+			mem[mem[sp + placeInStack]] = accum;
+
+			j += 3;
+		}
+	//STBX stack relative deferred
+		else if (mem[j] == 252) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			int placeInStack = memLocation;
+			mem[mem[sp + placeInStack]] = index;
+			j += 3;
+		}
 	//STWr SECTION HERE
 	//STWA direct = E1 = 225
 		else if (mem[j] == 225) {
@@ -329,6 +382,30 @@ int main() {
 			convert(index, &deciFirstHalf, &deciSecondHalf);
 			mem[sp - memLocation] = deciFirstHalf;
 			mem[sp - (memLocation + 1)] = deciSecondHalf;
+			j += 3;
+		}
+	//STWA stack relative deferred
+		else if (mem[j] == 228) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			int deciFirstHalf;
+			int deciSecondHalf;
+			convert(accum, &deciFirstHalf, &deciSecondHalf);
+			mem[mem[sp + memLocation]] = deciFirstHalf;
+			mem[mem[sp + (memLocation + 1)]] = deciSecondHalf;
+			j += 3;
+		}
+	//STWX stack relative deferred
+		else if (mem[j] == 236) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			int deciFirstHalf;
+			int deciSecondHalf;
+			convert(index, &deciFirstHalf, &deciSecondHalf);
+			mem[mem[sp + memLocation]] = deciFirstHalf;
+			mem[mem[sp + (memLocation + 1)]] = deciSecondHalf;
 			j += 3;
 		}
 	//DECO SECTION HERE
@@ -479,6 +556,15 @@ int main() {
 			j += 3;
 
 		}
+	//ADDA stack relative deferred
+		else if (mem[j] == 100) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			accum = accum + mem[mem[sp + memLocation]];
+			j += 3;
+
+		}
 	//ADDA immediate
 		else if (mem[j] == 96) {//adda,i
 			int first = mem[j + 1];
@@ -504,7 +590,15 @@ int main() {
 			index = index + memLocation;
 			j += 3;
 		}
+	//ADDX stack relative deferred
+		else if (mem[j] == 108) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			index = index + mem[mem[sp + memLocation]];
+			j += 3;
 
+		}
 	//SUBA direct
 		else if (mem[j] == 113) {//suba,d
 			int first = mem[j + 1];
@@ -521,7 +615,14 @@ int main() {
 			accum = accum - memLocation;
 			j += 3;
 		}
-
+	//SUBA stack relative deferred
+		else if (mem[j] == 116) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			accum = accum - mem[mem[sp + memLocation]];
+			j += 3;
+		}
 	//SUBX direct
 		else if (mem[j] == 121) {
 			int first = mem[j + 1];
@@ -536,6 +637,14 @@ int main() {
 			int second = mem[j + 2];
 			int memLocation = extractAddressLocation(first, second);
 			index = index - memLocation;
+			j += 3;
+		}
+	//SUBA stack relative deferred
+		else if (mem[j] == 124) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			index = index - mem[mem[sp + memLocation]];
 			j += 3;
 		}
 
