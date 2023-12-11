@@ -171,6 +171,16 @@ int main() {
 			index = mem[mem[sp + memLocation]];
 			j += 3;
 		}
+	//LDBA indexed
+		else if (mem[j] == 213) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+
+			int offSet = index * 2;
+			accum = mem[(memLocation + offSet)+1];
+			j += 3;
+		}
 	//LDWr SECTION HERE
 	//LDWA direct = C1 = 193
 		else if (mem[j] == 193) {
@@ -199,7 +209,6 @@ int main() {
 			word = extractAddressLocation(memLocation, memLocation + 1);
 			index = word;
 			//Accesses specified memory location
-			//Have not done much testing but this accesses the correct cell when using "D1 00 0D F1 FC 16 D1 00 0E F1 FC 16 00 48 69 zz"
 			index = mem[memLocation];
 			j += 3;
 		}
@@ -228,13 +237,15 @@ int main() {
 			index = memLocation;
 			j += 3;
 		}
+	//HAVE TO UPDATE THESE
 	//LDWA s = C3 = 195
 		else if (mem[j] == 195) {
 			int first = mem[j + 1];
 			int second = mem[j + 2];
 			int memLocation = extractAddressLocation(first, second);
-
-			accum = mem[sp - memLocation];
+			int word;
+			word = extractAddressLocation(sp+memLocation, sp+ memLocation + 1);
+			accum = word;
 			j += 3;
 		}
 	//LDWX s = CB = 203
@@ -243,7 +254,9 @@ int main() {
 			int second = mem[j + 2];
 			int memLocation = extractAddressLocation(first, second);
 
-			index = mem[sp - memLocation];
+			int word;
+			word = extractAddressLocation(sp + memLocation, sp + memLocation + 1);
+			index = word;
 			j += 3;
 		}
 	//LDWA stack relative deferred
@@ -252,7 +265,10 @@ int main() {
 			int second = mem[j + 2];
 			int memLocation = extractAddressLocation(first, second);
 
-			accum = mem[mem[sp + memLocation]];
+			int word;
+			word = extractAddressLocation(mem[sp + memLocation], mem[sp + memLocation + 1]);
+			//accum = mem[mem[sp + memLocation]];
+			accum = word;
 			j += 3;
 		}
 	//LDWX stack relative deferred
@@ -261,7 +277,22 @@ int main() {
 			int second = mem[j + 2];
 			int memLocation = extractAddressLocation(first, second);
 
-			index = mem[mem[sp + memLocation]];
+			int word;
+			word = extractAddressLocation(mem[sp + memLocation], mem[sp + memLocation + 1]);
+			index = word;
+			//index = mem[mem[sp + memLocation]];
+			j += 3;
+		}
+	//LDWA indexed
+		else if (mem[j] == 197) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+
+			int offSet = index * 2;
+			int word;
+			word = extractAddressLocation(memLocation+offSet, memLocation + offSet+ 1);
+			accum = word;
 			j += 3;
 		}
 
@@ -302,7 +333,7 @@ int main() {
 			int second = mem[j + 2];
 			int memLocation = extractAddressLocation(first, second);
 			int placeInStack = memLocation;
-			mem[sp - placeInStack] = accum;
+			mem[sp + placeInStack] = accum;
 
 			j += 3;
 		}
@@ -312,7 +343,7 @@ int main() {
 			int second = mem[j + 2];
 			int memLocation = extractAddressLocation(first, second);
 			int placeInStack = memLocation;
-			mem[sp - placeInStack] = index;
+			mem[sp + placeInStack] = index;
 
 			j += 3;
 		}
@@ -368,8 +399,8 @@ int main() {
 			int deciFirstHalf;
 			int deciSecondHalf;
 			convert(accum, &deciFirstHalf, &deciSecondHalf);
-			mem[sp - memLocation] = deciFirstHalf;
-			mem[sp - (memLocation + 1)] = deciSecondHalf;
+			mem[sp + memLocation] = deciFirstHalf;
+			mem[sp + (memLocation + 1)] = deciSecondHalf;
 			j += 3;
 		}
 	//STWX stack = EB = 235
@@ -380,8 +411,8 @@ int main() {
 			int deciFirstHalf;
 			int deciSecondHalf;
 			convert(index, &deciFirstHalf, &deciSecondHalf);
-			mem[sp - memLocation] = deciFirstHalf;
-			mem[sp - (memLocation + 1)] = deciSecondHalf;
+			mem[sp + memLocation] = deciFirstHalf;
+			mem[sp + (memLocation + 1)] = deciSecondHalf;
 			j += 3;
 		}
 	//STWA stack relative deferred
@@ -414,7 +445,9 @@ int main() {
 			int first = mem[j + 1];
 			int second = mem[j + 2];
 			int memLocation = extractAddressLocation(first, second);
-			printf("%d", mem[memLocation]);
+			int word;
+			word = extractAddressLocation(memLocation, memLocation+1);
+			printf("%d", word);
 			j += 3;
 		}
 	//DECO = 38(hexa) = 56 immediate
@@ -429,10 +462,17 @@ int main() {
 	// Deci,d
 		else if (mem[j] == 49) {
 			printf("Enter Deci input: ");
+			int input;
+			scanf("%d", &input);
 			int first = mem[j + 1];
 			int second = mem[j + 2];
 			int memLocation = extractAddressLocation(first, second);
-			//SHOULD BE LIKE STWA COMING BACK TOO LATER
+			
+			int deciFirstHalf;
+			int deciSecondHalf;
+			convert(input, &deciFirstHalf, &deciSecondHalf);
+			mem[memLocation] = deciFirstHalf;
+			mem[memLocation + 1] = deciSecondHalf;
 		}
 	//STRO SECTION
 	//STRO d = 49(hexa) = 73
@@ -553,6 +593,12 @@ int main() {
 			int second = mem[j + 2];
 			int memLocation = extractAddressLocation(first, second);
 			accum = accum + mem[memLocation];
+			if (accum > 32767) {
+				v = 1;
+			}
+			if (accum < -32768) {
+				v = 1;
+			}
 			j += 3;
 
 		}
@@ -562,6 +608,12 @@ int main() {
 			int second = mem[j + 2];
 			int memLocation = extractAddressLocation(first, second);
 			accum = accum + mem[mem[sp + memLocation]];
+			if (accum > 32767) {
+				v = 1;
+			}
+			if (accum < -32768) {
+				v = 1;
+			}
 			j += 3;
 
 		}
@@ -571,6 +623,12 @@ int main() {
 			int second = mem[j + 2];
 			int memLocation = extractAddressLocation(first, second);
 			accum = accum + memLocation;
+			if (accum > 32767) {
+				v = 1;
+			}
+			if (accum < -32768) {
+				v = 1;
+			}
 			j += 3;
 
 		}
@@ -580,6 +638,12 @@ int main() {
 			int second = mem[j + 2];
 			int memLocation = extractAddressLocation(first, second);
 			index = index + mem[memLocation];
+			if (index > 32767) {
+				v = 1;
+			}
+			if (index < -32768) {
+				v = 1;
+			}
 			j += 3;
 		}
 	//ADDX immediate
@@ -588,6 +652,12 @@ int main() {
 			int second = mem[j + 2];
 			int memLocation = extractAddressLocation(first, second);
 			index = index + memLocation;
+			if (index > 32767) {
+				v = 1;
+			}
+			if (index < -32768) {
+				v = 1;
+			}
 			j += 3;
 		}
 	//ADDX stack relative deferred
@@ -596,6 +666,12 @@ int main() {
 			int second = mem[j + 2];
 			int memLocation = extractAddressLocation(first, second);
 			index = index + mem[mem[sp + memLocation]];
+			if (index > 32767) {
+				v = 1;
+			}
+			if (index < -32768) {
+				v = 1;
+			}
 			j += 3;
 
 		}
@@ -605,6 +681,12 @@ int main() {
 			int second = mem[j + 2];
 			int memLocation = extractAddressLocation(first, second);
 			accum = accum - mem[memLocation];
+			if (accum > 32767) {
+				v = 1;
+			}
+			if (accum < -32768) {
+				v = 1;
+			}
 			j += 3;
 		}
 	//SUBA immediate
@@ -613,6 +695,12 @@ int main() {
 			int second = mem[j + 2];
 			int memLocation = extractAddressLocation(first, second);
 			accum = accum - memLocation;
+			if (accum > 32767) {
+				v = 1;
+			}
+			if (accum < -32768) {
+				v = 1;
+			}
 			j += 3;
 		}
 	//SUBA stack relative deferred
@@ -621,6 +709,12 @@ int main() {
 			int second = mem[j + 2];
 			int memLocation = extractAddressLocation(first, second);
 			accum = accum - mem[mem[sp + memLocation]];
+			if (accum > 32767) {
+				v = 1;
+			}
+			if (accum < -32768) {
+				v = 1;
+			}
 			j += 3;
 		}
 	//SUBX direct
@@ -629,6 +723,12 @@ int main() {
 			int second = mem[j + 2];
 			int memLocation = extractAddressLocation(first, second);
 			index = index - mem[memLocation];
+			if (index > 32767) {
+				v = 1;
+			}
+			if (index < -32768) {
+				v = 1;
+			}
 			j += 3;
 		}
 	//SUBX immediate
@@ -637,6 +737,12 @@ int main() {
 			int second = mem[j + 2];
 			int memLocation = extractAddressLocation(first, second);
 			index = index - memLocation;
+			if (index > 32767) {
+				v = 1;
+			}
+			if (index < -32768) {
+				v = 1;
+			}
 			j += 3;
 		}
 	//SUBA stack relative deferred
@@ -645,6 +751,12 @@ int main() {
 			int second = mem[j + 2];
 			int memLocation = extractAddressLocation(first, second);
 			index = index - mem[mem[sp + memLocation]];
+			if (accum > 32767) {
+				v = 1;
+			}
+			if (accum < -32768) {
+				v = 1;
+			}
 			j += 3;
 		}
 
@@ -652,12 +764,24 @@ int main() {
 	// ASLA
 		else if (mem[j] == 10) {
 			accum = accum * 2;
+			if (accum > 32767) {
+				v = 1;
+			}
+			if (accum < -32768) {
+				v = 1;
+			}
 			j += 1;
 		}
 
 	// ASLX
 		else if (mem[j] == 11) {
 			index = index * 2;
+			if (index > 32767) {
+				v = 1;
+			}
+			if (index < -32768) {
+				v = 1;
+			}
 			j += 1;
 		}
 
@@ -687,12 +811,24 @@ int main() {
 		else if (mem[j] == 8) {
 			accum = ~accum;
 			accum += 1;
+			if (accum > 32767) {
+				v = 1;
+			}
+			if (accum < -32768) {
+				v = 1;
+			}
 			j += 1;
 		}
 	//NEGX = 09 = 9
 		else if (mem[j] == 9) {
 			index = ~index;
 			index += 1;
+			if (index > 32767) {
+				v = 1;
+			}
+			if (index < -32768) {
+				v = 1;
+			}
 			j += 1;
 		}
 
@@ -723,6 +859,6 @@ int main() {
 		}
 
 	//TODO = BRV, CPWr, CPBr
-	//Addressing Modes to Add = stack relative deferred, indexed, stack-indexed, stack-deferred indexed, indirect
+	//Addressing Modes to Add = DECO/DECI addressing modes, indexed, stack-indexed, stack-deferred indexed, indirect
 	return 0;
 }
