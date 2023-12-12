@@ -561,6 +561,84 @@ int main() {
 			mem[mem[sp + (memLocation + 1)]] = deciSecondHalf;
 			j += 3;
 		}
+	//STWA indexed
+		else if (mem[j] == 229) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			int deciFirstHalf;
+			int deciSecondHalf;
+			int offSet = index * 2;
+			convert(accum, &deciFirstHalf, &deciSecondHalf);
+			mem[memLocation + offSet] = deciFirstHalf;
+			mem[memLocation + offSet + 1] = deciSecondHalf;
+			j += 3;
+		}
+	//STWX Indexed
+		else if (mem[j] = 237) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			int deciFirstHalf;
+			int deciSecondHalf;
+			int offSet = index * 2;
+			convert(index, &deciFirstHalf, &deciSecondHalf);
+			mem[memLocation + offSet] = deciFirstHalf;
+			mem[memLocation + offSet + 1] = deciSecondHalf;
+			j += 3;
+		}
+	//STWA stack-indexed
+		else if (mem[j] == 230) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			int deciFirstHalf;
+			int deciSecondHalf;
+			int offSet = index * 2;
+			convert(accum, &deciFirstHalf, &deciSecondHalf);
+			mem[sp + memLocation + offSet] = deciFirstHalf;
+			mem[sp + memLocation + offSet + 1] = deciSecondHalf;
+			j += 3;
+		}
+	// STWX stack indexed
+		else if (mem[j] == 238) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			int deciFirstHalf;
+			int deciSecondHalf;
+			int offSet = index * 2;
+			convert(index, &deciFirstHalf, &deciSecondHalf);
+			mem[sp + memLocation + offSet] = deciFirstHalf;
+			mem[sp + memLocation + offSet + 1] = deciSecondHalf;
+			j += 3;
+		}
+	//STWA stack-index-defferred
+		else if (mem[j] == 231) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			int deciFirstHalf;
+			int deciSecondHalf;
+			int offSet = index * 2;
+			convert(accum, &deciFirstHalf, &deciSecondHalf);
+			mem[mem[sp + memLocation + offSet]] = deciFirstHalf;
+			mem[mem[sp + memLocation + offSet + 1]] = deciSecondHalf;
+			j += 3;
+		}
+	//STWX stack-indexed-defferred
+		else if (mem[j] == 239) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			int deciFirstHalf;
+			int deciSecondHalf;
+			int offSet = index * 2;
+			convert(index, &deciFirstHalf, &deciSecondHalf);
+			mem[mem[sp + memLocation + offSet]] = deciFirstHalf;
+			mem[mem[sp + memLocation + offSet + 1]] = deciSecondHalf;
+			j += 3;
+		}
 	//DECO SECTION HERE
 	//DECO = 39(hexa) = 57 direct
 		else if (mem[j] == 57) {
