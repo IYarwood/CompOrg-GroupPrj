@@ -295,6 +295,18 @@ int main() {
 			accum = word;
 			j += 3;
 		}
+	//LDWX indexed
+		else if (mem[j] == 205) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+
+			int offSet = index * 2;
+			int word;
+			word = extractAddressLocation(memLocation + offSet, memLocation + offSet + 1);
+			index = word;
+			j += 3;
+		}
 	//LDWA stack-indexed
 		else if (mem[j] = 198) {
 			int first = mem[j + 1];
@@ -307,6 +319,18 @@ int main() {
 			accum = word;
 			j += 3;
 		}
+	//LDWX stack-indexed
+		else if (mem[j] == 206) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+
+			int offSet = index * 2;
+			int word;
+			word = extractAddressLocation(sp + memLocation + offSet, sp + memLocation + offSet + 1);
+			index = word;
+			j += 3;
+		}
 	//LDWA stack-index-defferred
 		else if (mem[j] == 199) {
 			int first = mem[j + 1];
@@ -317,6 +341,18 @@ int main() {
 			int word;
 			word = extractAddressLocation(mem[sp + memLocation + offSet], mem[sp + memLocation + offSet + 1]);
 			accum = word;
+			j += 3;
+		}
+	//LDWX stack-index-deferred
+		else if (mem[j] == 207) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+
+			int offSet = index * 2;
+			int word;
+			word = extractAddressLocation(mem[sp + memLocation + offSet], mem[sp + memLocation + offSet + 1]);
+			index = word;
 			j += 3;
 		}
 
@@ -390,6 +426,68 @@ int main() {
 			mem[mem[sp + placeInStack]] = index;
 			j += 3;
 		}
+	//STBA indexed
+		else if (mem[j] == 245) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+
+			int offSet = index * 2;
+			mem[memLocation + offSet] = accum;
+			j += 3;
+		}
+	//STBX indexed
+		else if (mem[j] == 253) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+
+			int offSet = index * 2;
+			mem[memLocation + offSet] = index;
+			j += 3;
+		}
+	//STBA stack-indexed
+		else if (mem[j] == 246) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+
+			int offSet = index * 2;
+			mem[sp + memLocation + offSet] = accum;
+			j += 3;
+		}
+	//STBX stack-indexed
+		else if (mem[j] = 254) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+
+			int offSet = index * 2;
+			mem[sp + memLocation + offSet] = index;
+			j += 3;
+		}
+	//STBA stack-indexed-defferred
+		else if (mem[j] == 247) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+
+			int offSet = index * 2;
+			mem[mem[sp + memLocation + offSet]] = accum;
+			j += 3;
+		}
+	//STBX stack-indexed-defferred
+		else if (mem[j] == 255) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+
+			int offSet = index * 2;
+			mem[mem[sp + memLocation + offSet]] = index;
+			j += 3;
+		}
+
+
 	//STWr SECTION HERE
 	//STWA direct = E1 = 225
 		else if (mem[j] == 225) {
