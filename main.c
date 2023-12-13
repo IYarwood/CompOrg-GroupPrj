@@ -237,7 +237,7 @@ int main() {
 			index = memLocation;
 			j += 3;
 		}
-	//HAVE TO UPDATE THESE
+	
 	//LDWA s = C3 = 195
 		else if (mem[j] == 195) {
 			int first = mem[j + 1];
@@ -267,7 +267,6 @@ int main() {
 
 			int word;
 			word = extractAddressLocation(mem[sp + memLocation], mem[sp + memLocation + 1]);
-			//accum = mem[mem[sp + memLocation]];
 			accum = word;
 			j += 3;
 		}
@@ -600,7 +599,7 @@ int main() {
 			mem[sp + memLocation + offSet + 1] = deciSecondHalf;
 			j += 3;
 		}
-	// STWX stack indexed
+	//STWX stack indexed
 		else if (mem[j] == 238) {
 			int first = mem[j + 1];
 			int second = mem[j + 2];
@@ -639,6 +638,7 @@ int main() {
 			mem[mem[sp + memLocation + offSet + 1]] = deciSecondHalf;
 			j += 3;
 		}
+
 	//DECO SECTION HERE
 	//DECO = 39(hexa) = 57 direct
 		else if (mem[j] == 57) {
@@ -658,8 +658,66 @@ int main() {
 			printf("%d", memLocation);
 			j += 3;
 		}
-	//THIS STILL NEEDS WORK COME BACK TOO
-	// Deci,d
+	//DECO stack
+		else if (mem[j] == 59) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			int word;
+			word = extractAddressLocation(sp + memLocation, sp + memLocation + 1);
+			printf("%d", word);
+			j += 3;
+		}
+	//DECO stack-deffered
+		else if (mem[j] == 60) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+
+			int word;
+			word = extractAddressLocation(mem[sp + memLocation], mem[sp + memLocation + 1]);
+			printf("%d", word);
+			j += 3;
+		}
+	//DECO indexed
+		else if (mem[j] == 61) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+
+			int offSet = index * 2;
+			int word;
+			word = extractAddressLocation(memLocation + offSet, memLocation + offSet + 1);
+			printf("%d", word);
+			j += 3;
+		}
+	//DECO stack indexed
+		else if (mem[j] == 62) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+
+			int offSet = index * 2;
+			int word;
+			word = extractAddressLocation(sp + memLocation + offSet, sp + memLocation + offSet + 1);
+			printf("%d", word);
+			j += 3;
+		}
+	//DECO stack indexed defferred
+		else if (mem[j] == 63) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+
+			int offSet = index * 2;
+			int word;
+			word = extractAddressLocation(mem[sp + memLocation + offSet], mem[sp + memLocation + offSet + 1]);
+			printf("%d", word);
+			j += 3;
+		}
+
+	
+	//DECI direct
 		else if (mem[j] == 49) {
 			printf("Enter Deci input: ");
 			int input;
@@ -673,7 +731,92 @@ int main() {
 			convert(input, &deciFirstHalf, &deciSecondHalf);
 			mem[memLocation] = deciFirstHalf;
 			mem[memLocation + 1] = deciSecondHalf;
+			j += 3;
 		}
+	//DECI stack
+		else if (mem[j] == 51) {
+			printf("Enter Deci input: ");
+			int input;
+			scanf("%d", &input);
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+
+			int deciFirstHalf;
+			int deciSecondHalf;
+			convert(input, &deciFirstHalf, &deciSecondHalf);
+			mem[sp+ memLocation] = deciFirstHalf;
+			mem[sp+ memLocation + 1] = deciSecondHalf;
+			j += 3;
+		}
+	//DECI stack defferred
+		else if (mem[j] == 52) {
+			printf("Enter Deci input: ");
+			int input;
+			scanf("%d", &input);
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+
+			int deciFirstHalf;
+			int deciSecondHalf;
+			convert(input, &deciFirstHalf, &deciSecondHalf);
+			mem[mem[sp + memLocation]] = deciFirstHalf;
+			mem[mem[sp + memLocation + 1]] = deciSecondHalf;
+			j += 3;
+		}
+	//DECI indexed
+		else if (mem[j] == 53) {
+			printf("Enter Deci input: ");
+			int input;
+			scanf("%d", &input);
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+
+			int deciFirstHalf;
+			int deciSecondHalf;
+			int offSet = index * 2;
+			convert(input, &deciFirstHalf, &deciSecondHalf);
+			mem[memLocation + offSet] = deciFirstHalf;
+			mem[memLocation + offSet + 1] = deciSecondHalf;
+			j += 3;
+		}
+	//DECI stack indexed
+		else if (mem[j] == 54) {
+			printf("Enter Deci input: ");
+			int input;
+			scanf("%d", &input);
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+
+			int deciFirstHalf;
+			int deciSecondHalf;
+			int offSet = index * 2;
+			convert(input, &deciFirstHalf, &deciSecondHalf);
+			mem[sp + memLocation + offSet] = deciFirstHalf;
+			mem[sp + memLocation + offSet + 1] = deciSecondHalf;
+			j += 3;
+		}
+	//DECI stack index defferred
+		else if (mem[j] == 55) {
+			printf("Enter Deci input: ");
+			int input;
+			scanf("%d", &input);
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+
+			int deciFirstHalf;
+			int deciSecondHalf;
+			int offSet = index * 2;
+			convert(input, &deciFirstHalf, &deciSecondHalf);
+			mem[mem[sp + memLocation + offSet]] = deciFirstHalf;
+			mem[mem[sp + memLocation + offSet + 1]] = deciSecondHalf;
+			j += 3;
+		}
+
 	//STRO SECTION
 	//STRO d = 49(hexa) = 73
 		else if (mem[j] == 73) {
@@ -1170,7 +1313,6 @@ int main() {
 			j += 1;
 		}
 
-	//TODO = BRV, CPWr, CPBr
-	//Addressing Modes to Add = DECO/DECI addressing modes, indexed, stack-indexed, stack-deferred indexed, indirect
+	//Addressing Modes to Add = indirect
 	return 0;
 }
