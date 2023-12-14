@@ -3,7 +3,12 @@
 #include <string.h>
 #include <stdlib.h>
 
-//THIS IS CURRENT FILE 12/11/23
+//Authors: Ian Yarwood, Aditya Shah, Nicholas Haught, Sahmi Willoughby
+//Program: Pep 9 
+//Date: 12/15/23
+//Class: Comp Org/Arch
+//Desc: Performs specific operations based off of given object code.
+
 void convert(int num, int* firstHalf, int* secondHalf) {
 
 	char hexString[5];  // 4 characters for hex and 1 for the null
@@ -24,8 +29,8 @@ void convert(int num, int* firstHalf, int* secondHalf) {
 	*secondHalf = deciSecondHalf;
 
 	// Print the split strings
-	printf("First part: %s\n", splitList[0]);
-	printf("Second part: %s\n", splitList[1]);
+	//printf("First part: %s\n", splitList[0]);
+	//printf("Second part: %s\n", splitList[1]);
 }
 
 int extractAddressLocation(int first, int second) {
@@ -82,7 +87,7 @@ int main() {
 	//While loop to work with object code
 	while (mem[j] != '\0')
 		//LDBr SECTION HERE
-		//If mem value = 209 = D1 = LDBA Direct load the next 2 cells of mem
+	//If mem value = 209 = D1 = LDBA Direct load the next 2 cells of mem
 		if (mem[j] == 209) {
 			int first = mem[j + 1];
 			int second = mem[j + 2];
@@ -178,9 +183,60 @@ int main() {
 			int memLocation = extractAddressLocation(first, second);
 
 			int offSet = index * 2;
-			accum = mem[(memLocation + offSet)+1];
+			accum = mem[memLocation + offSet];
 			j += 3;
 		}
+	//LDBX indexed
+		else if (mem[j] == 221) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+
+			int offSet = index * 2;
+			index = mem[memLocation + offSet];
+			j += 3;
+		}
+	//LDBA stack indexed
+		else if (mem[j] == 214) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+
+			int offSet = index * 2;
+			accum = mem[sp + memLocation + offSet];
+			j += 3;
+		}
+	//LDBX stack indexed
+		else if (mem[j] == 222) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+
+			int offSet = index * 2;
+			index = mem[sp + memLocation + offSet];
+			j += 3;
+		}
+	//LDBA stack indexed deferred
+		else if (mem[j] == 215) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+
+			int offSet = index * 2;
+			accum = mem[mem[sp + memLocation + offSet]];
+			j += 3;
+		}
+	//LDBX stack indexed deferred
+		else if (mem[j] == 223) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+
+			int offSet = index * 2;
+			index = mem[mem[sp + memLocation + offSet]];
+			j += 3;
+		}
+
 	//LDWr SECTION HERE
 	//LDWA direct = C1 = 193
 		else if (mem[j] == 193) {
@@ -212,7 +268,6 @@ int main() {
 			index = mem[memLocation];
 			j += 3;
 		}
-
 	//LDWA Immediate = C0 = 192
 		else if (mem[j] == 192) {
 			int first = mem[j + 1];
@@ -237,7 +292,6 @@ int main() {
 			index = memLocation;
 			j += 3;
 		}
-	
 	//LDWA s = C3 = 195
 		else if (mem[j] == 195) {
 			int first = mem[j + 1];
@@ -831,6 +885,45 @@ int main() {
 			}
 			j += 3;
 		}
+	//STRO stack
+		else if (mem[j] == 75) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+
+			int track = memLocation;
+			while (mem[sp + track] != 32) {
+				printf("%c", mem[sp + track]);
+				track += 1;
+			}
+			j += 3;
+		}
+	//STRO stack deferred
+		else if (mem[j] == 76) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+
+			int track = memLocation;
+			while (mem[mem[sp + track]] != 32) {
+				printf("%c", mem[mem[sp + track]]);
+				track += 1;
+			}
+			j += 3;
+		}
+	//STRO indexed
+		else if (mem[j] == 77) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			int offSet = index * 2;
+			int track = memLocation;
+			while (mem[track + offSet] != 32) {
+				printf("%c", mem[track + offSet]);
+				track += 1;
+			}
+			j += 3;
+		}
 
 	//BR SECTION HERE
 	//BR = 12(hexa) = 18
@@ -912,7 +1005,7 @@ int main() {
 				j += 3;
 			}
 		}
-	// BRV = 32
+	//BRV = 32
 		else if (mem[j] == 32) {
 			if (v = 1) {
 				int first = mem[j + 1];
@@ -936,23 +1029,22 @@ int main() {
 			if (check < 1) {
 				n = 1;
 			}
-
 		}
-	// CPWa= 161 (d)
+	//CPWa= 161 (d)
 		else if (mem[j] == 161) {
 			int check;
 			int first = mem[j + 1];
 			int second = mem[j + 2];
 			int memLocation = extractAddressLocation(first, second);
 			int word;
-			word = extractAddressLocation(memLocation, memLocation + 1);
+			word = extractAddressLocation(mem[memLocation], mem[memLocation + 1]);
 			check = accum - word;
 			if (check < 1) {
 				n = 1;
 			}
 
 		}
-	// CPWx= 168 (i)
+	//CPWx= 168 (i)
 		else if (mem[j] == 168) {
 			int check;
 			int first = mem[j + 1];
@@ -963,21 +1055,50 @@ int main() {
 				n = 1;
 			}
 		}
-	// CPWx= 169 (d)
+	//CPWx= 169 (d)
 		else if (mem[j] == 169) {
 			int check;
 			int first = mem[j + 1];
 			int second = mem[j + 2];
 			int memLocation = extractAddressLocation(first, second);
 			int word;
-			word = extractAddressLocation(memLocation, memLocation + 1);
+			word = extractAddressLocation(mem[memLocation], mem[memLocation + 1]);
 			check = index - word;
 			if (check < 1) {
 				n = 1;
 			}
 
 		}
-	// CPba= 176 (i)
+	//CPWA stack
+		else if (mem[j] == 163) {
+			int check;
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			int word;
+			word = extractAddressLocation(mem[sp + memLocation], mem[sp + memLocation + 1]);
+			check = accum - word;
+			if (check < 1) {
+				n = 1;
+			}
+		}
+	//CPWX stack
+		else if (mem[j] == 171) {
+			int check;
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			int word;
+			word = extractAddressLocation(mem[sp + memLocation], mem[sp + memLocation + 1]);
+			check = index - word;
+			if (check < 1) {
+				n = 1;
+			}
+		}
+
+
+	//CPB SECTION
+	//CPba= 176 (i)
 		else if (mem[j] == 176) {
 			int check;
 			int first = mem[j + 1];
@@ -989,7 +1110,7 @@ int main() {
 			}
 
 		}
-	// CPba= 177 (d)
+	//CPba= 177 (d)
 		else if (mem[j] == 177) {
 			int check;
 			int first = mem[j + 1];
@@ -1001,7 +1122,7 @@ int main() {
 			}
 
 		}
-	// CPbx= 184(i)
+	//CPbx= 184(i)
 		else if (mem[j] == 184) {
 			int check;
 			int first = mem[j + 1];
@@ -1013,7 +1134,7 @@ int main() {
 			}
 
 		}
-	// CPbx= 185(d)
+	//CPbx= 185(d)
 		else if (mem[j] == 185) {
 			int check;
 			int first = mem[j + 1];
@@ -1216,7 +1337,7 @@ int main() {
 		}
 
 	//AS SECTION
-	// ASLA
+	//ASLA
 		else if (mem[j] == 10) {
 			accum = accum * 2;
 			if (accum > 32767) {
@@ -1228,7 +1349,7 @@ int main() {
 			j += 1;
 		}
 
-	// ASLX
+	//ASLX
 		else if (mem[j] == 11) {
 			index = index * 2;
 			if (index > 32767) {
@@ -1240,12 +1361,12 @@ int main() {
 			j += 1;
 		}
 
-	// ASRA
+	//ASRA
 		else if (mem[j] == 12) {
 			accum = accum / 2;
 			j += 1;
 		}
-	// ASRX
+	//ASRX
 		else if (mem[j] == 13) {
 			index = index / 2;
 			j += 1;
