@@ -119,7 +119,7 @@ int main() {
 			int second = mem[j + 2];
 			int memLocation = extractAddressLocation(first, second);
 
-			accum = mem[sp - memLocation];
+			accum = mem[sp + memLocation];
 			j += 3;
 		}
 	//LDBA stack relative deferred
@@ -164,7 +164,7 @@ int main() {
 			int second = mem[j + 2];
 			int memLocation = extractAddressLocation(first, second);
 
-			index = mem[sp - memLocation];
+			index = mem[sp + memLocation];
 			j += 3;
 		}
 	//LDBX stack relative deferred
@@ -1155,12 +1155,27 @@ int main() {
 			int memLocation = extractAddressLocation(first, second);
 			sp -= memLocation;
 		}
+	//SUBSP Stack Defered = 92
+		else if (mem[j] == 88) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			sp -= mem[mem[sp + memLocation]];
+		}
+
 	//ADDSP Immediate = 50(hexa) = 80
 		else if (mem[j] == 80) {
 			int first = mem[j + 1];
 			int second = mem[j + 2];
 			int memLocation = extractAddressLocation(first, second);
 			sp += memLocation;
+		}
+	//ADDSP Stack Deferred = 84
+		else if (mem[j] == 80) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			sp += mem[mem[sp + memLocation]];
 		}
 
 	//ADDA direct
