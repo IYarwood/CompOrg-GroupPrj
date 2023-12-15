@@ -1155,12 +1155,26 @@ int main() {
 			int memLocation = extractAddressLocation(first, second);
 			sp -= memLocation;
 		}
+	//SUBSP Stack Defered = 92
+		else if (mem[j] == 88) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			sp -= mem[mem[sp + memLocation]];
+		}
 	//ADDSP Immediate = 50(hexa) = 80
 		else if (mem[j] == 80) {
 			int first = mem[j + 1];
 			int second = mem[j + 2];
 			int memLocation = extractAddressLocation(first, second);
 			sp += memLocation;
+		}
+	//ADDSP Stack Deferred = 84
+		else if (mem[j] == 80) {
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			sp += mem[mem[sp + memLocation]];
 		}
 
 	//ADDA direct
