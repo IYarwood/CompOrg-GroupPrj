@@ -1042,7 +1042,6 @@ int main() {
 			if (check < 1) {
 				n = 1;
 			}
-
 		}
 	//CPWx= 168 (i)
 		else if (mem[j] == 168) {
@@ -1067,9 +1066,8 @@ int main() {
 			if (check < 1) {
 				n = 1;
 			}
-
 		}
-	//CPWA stack
+	//CPWA stack (s)
 		else if (mem[j] == 163) {
 			int check;
 			int first = mem[j + 1];
@@ -1077,6 +1075,58 @@ int main() {
 			int memLocation = extractAddressLocation(first, second);
 			int word;
 			word = extractAddressLocation(mem[sp + memLocation], mem[sp + memLocation + 1]);
+			check = accum - word;
+			if (check < 1) {
+				n = 1;
+			}
+		}
+	//CPWA stack relative deffered = 164 (sf)
+		else if (mem[j] == 164) {
+			int check;
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			int word;
+			word = extractAddressLocation(mem[mem[sp + memLocation]], mem[mem[sp + memLocation + 1]]);
+			check = accum - word;
+			if (check < 1) {
+				n = 1;
+			}
+		}
+	//CPWa= 165 (x)
+		else if (mem[j] == 165) {
+			int check;
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			int word;
+			word = extractAddressLocation(mem[memLocation + offSet], mem[memLocation + 1 + offSet]);
+			check = accum - word;
+			if (check < 1) {
+				n = 1;
+			}
+		}
+	//CPWa= 166 (Sx)
+		else if (mem[j] == 166) {
+			int check;
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			int word;
+			word = extractAddressLocation(mem[sp + memLocation + offSet], mem[sp + memLocation + 1 + offSet]);
+			check = accum - word;
+			if (check < 1) {
+				n = 1;
+			}
+		}
+	//CPWa= 167 (Sfx)
+		else if (mem[j] == 167) {
+			int check;
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			int word;
+			word = extractAddressLocation(mem[mem[sp + memLocation + offSet]], mem[mem[sp + memLocation + 1 + offSet]]);
 			check = accum - word;
 			if (check < 1) {
 				n = 1;
@@ -1095,6 +1145,58 @@ int main() {
 				n = 1;
 			}
 		}
+	//CPWX stack relative deffered = 172(sf)
+		else if (mem[j] == 172) {
+			int check;
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			int word;
+			word = extractAddressLocation(mem[mem[sp + memLocation]], mem[mem[sp + memLocation + 1]]);
+			check = index - word;
+			if (check < 1) {
+				n = 1;
+			}
+		}
+	//CPWX = 173 (x)
+		else if (mem[j] == 173) {
+			int check;
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			int word;
+			word = extractAddressLocation(mem[memLocation + offSet], mem[memLocation + 1 + offSet]);
+			check = index - word;
+			if (check < 1) {
+				n = 1;
+			}
+		}
+	//CPWX = 174 (Sx)
+		else if (mem[j] == 174) {
+			int check;
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			int word;
+			word = extractAddressLocation(mem[sp + memLocation + offSet], mem[sp + memLocation + 1 + offSet]);
+			check = index - word;
+			if (check < 1) {
+				n = 1;
+			}
+		}
+	//CPWX = 175 (Sfx)
+		else if (mem[j] == 175) {
+			int check;
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			int word;
+			word = extractAddressLocation(mem[mem[sp + memLocation + offSet]], mem[mem[sp + memLocation + 1 + offSet]]);
+			check = index - word;
+			if (check < 1) {
+				n = 1;
+			}
+		}
 
 
 	//CPB SECTION
@@ -1108,7 +1210,6 @@ int main() {
 			if (check < 1) {
 				n = 1;
 			}
-
 		}
 	//CPba= 177 (d)
 		else if (mem[j] == 177) {
@@ -1120,7 +1221,6 @@ int main() {
 			if (check < 1) {
 				n = 1;
 			}
-
 		}
 	//CPbx= 184(i)
 		else if (mem[j] == 184) {
@@ -1132,7 +1232,6 @@ int main() {
 			if (check < 1) {
 				n = 1;
 			}
-
 		}
 	//CPbx= 185(d)
 		else if (mem[j] == 185) {
@@ -1144,8 +1243,124 @@ int main() {
 			if (check < 1) {
 				n = 1;
 			}
-
 		}
+	//CPba stack = 179 (s)
+		else if (mem[j] == 179) {
+			int check;
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			check = accum - mem[sp + memLocation];
+			if (check < 1) {
+				n = 1;
+			}
+		}
+	//CPba stack relative deffered = 180 (sf)
+		else if (mem[j] == 180) {
+			int check;
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			check = accum - mem[mem[sp + memLocation]];
+			if (check < 1) {
+				n = 1;
+			}
+		}
+	//CPba indexed = 181 (x)
+		else if (mem[j] == 181) {
+			int check;
+			int offSet = index * 2;
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			check = accum - mem[memLocation + offSet];
+			if (check < 1) {
+				n = 1;
+			}
+		}
+	//CPba stack - indexed = 182(sx)
+		else if (mem[j] == 182) {
+			int check;
+			int offSet = index * 2;
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			check = accum - mem[sp + memLocation + offSet];
+			if (check < 1) {
+				n = 1;
+			}
+		}
+	//CPba stack deffered indexed = 183 (sfx)
+		else if (mem[j] == 183) {
+			int check;
+			int offSet = index * 2; 
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			check = accum - mem[mem[sp + memLocation + offSet]];
+			if (check < 1) {
+				n = 1;
+			}
+		}
+	//CPbx stack = 187 (s)
+		else if (mem[j] == 187) {
+			int check;
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			check = index - mem[sp + memLocation];
+			if (check < 1) {
+				n = 1;
+			}
+		}
+	//CPbx stack relative deffered = 188 (sf)
+		else if (mem[j] == 188) {
+			int check;
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			check = index - mem[mem[sp + memLocation]];
+			if (check < 1) {
+				n = 1;
+			}
+		}
+	//CPbx indexed = 189 (x)
+		else if (mem[j] == 189) {
+			int check;
+			int offSet = index * 2;
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			check = index - mem[memLocation + offSet];
+			if (check < 1) {
+				n = 1;
+			}
+		}
+	//CPbx stack - indexed = 190 (sx)
+		else if (mem[j] == 190) {
+			int check;
+			int offSet = index * 2;
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			check = index - mem[sp + memLocation + offSet];
+			if (check < 1) {
+				n = 1;
+			}
+		}
+	//CPbx stack deffered indexed = 183 (sfx)
+		else if (mem[j] == 183) {
+			int check;
+			int offset = index * 2;
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			check = index - mem[mem[sp + memLocation + offSet]];
+			if (check < 1) {
+				n = 1;
+			}
+		}
+
 
 	//STACK POINTER SECTION HERE
 	//SUBSP Immediate = 58(hexa) = 88
