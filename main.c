@@ -1320,6 +1320,33 @@ int main() {
 				n = 1;
 			}
 		}
+	//CPWa= 162 (n)
+		else if (mem[j] == 162) {
+			int check;
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			int word;
+			word = extractAddressLocation(mem[mem[memLocation]], mem[mem[memLocation + 1]]);
+			check = accum - word;
+			if (check < 1) {
+				n = 1;
+			}
+
+		}
+	//CPWx= 170 (n)
+		else if (mem[j] == 170) {
+			int check;
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			int word;
+			word = extractAddressLocation(mem[mem[memLocation]], mem[mem[memLocation + 1]]);
+			check = index - word;
+			if (check < 1) {
+				n = 1;
+			}
+		}
 
 
 	//CPB SECTION
@@ -1479,6 +1506,28 @@ int main() {
 			int second = mem[j + 2];
 			int memLocation = extractAddressLocation(first, second);
 			check = index - mem[mem[sp + memLocation + offSet]];
+			if (check < 1) {
+				n = 1;
+			}
+		}
+	//CPba= 178 (n)
+		else if (mem[j] == 178) {
+			int check;
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			check = accum - mem[mem[memLocation]];
+			if (check < 1) {
+				n = 1;
+			}
+		}
+	//CPbx= 186 (n)
+		else if (mem[j] == 186) {
+			int check;
+			int first = mem[j + 1];
+			int second = mem[j + 2];
+			int memLocation = extractAddressLocation(first, second);
+			check = index - mem[mem[memLocation]];
 			if (check < 1) {
 				n = 1;
 			}
